@@ -25,7 +25,7 @@ def index():
 
 @app.route('/app.js')
 def javascript():
-    return ReadFile('app.js')
+    return ReadFile('app.js') 
 
 @app.route('/getmetrique', methods = [ 'GET' ])
 def getmetriqueweb():
