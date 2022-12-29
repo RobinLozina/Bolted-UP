@@ -49,14 +49,14 @@ def getwithgazweb():
 def gettrapezeweb():
     donnees = request.get_data()
     infos = json.loads(donnees)
-    result = GetTrapeze(infos['dvnu'], infos['denu'], infos['surep'], infos['long'])
+    result = GetTrapeze(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'], infos['quality'])
     return json.dumps(result)
 
 @app.route('/GetRond', methods = [ 'POST' ])
 def getrondweb():
     donnees = request.get_data()
     infos = json.loads(donnees)
-    result = GetRond(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'])
+    result = GetRond(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'], infos['quality'])
     return json.dumps(result)
 
 
@@ -69,108 +69,295 @@ def GetMetrique(dsup, dinf, surep, long,pas,quality):
     pasmax = long / 5 #car 5 fillets en prise minimum
     dmax = dsup - surep
     dmin = dinf + surep
-    diam=[]
-    pasGros=[]
-    pasFin1=[]
-    pasFin2=[]
-    pasFin3=[]
-    pasFin4=[]
     compteur=0 
-    
+    result=np.empty((0,12)) #empty array to store the results and return it
     with open(f, 'r') as csvfile:
         reader = csv.writer(csvfile,delimiter=';')
         next(reader) #skip header line
         for row in reader:
 
             if quality == 0: #if we want only the col 1 values
-                if pas ==0: #if we want only "pas gros"
-                    if row[1]=='M' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<5:
-                        diam.append(row[2])
-                        pasGros.append(row[3])
+                if pas == 0: #if we want only "pas gros"
+                    if row[1]=='M' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<3:
+
+                        cal=np.array[[row[3],row[4],row[3]*1.082*row[4],row[3]*1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        result=np.append(result,cal,axis=0)
+
                 else: #if we want "pas gros" and "pas fin"
-                    if row[1]=='M' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<5:
-                        diam.append(row[2])
-                        pasGros.append(row[3])
-                        pasFin1.append(row[4])
-                        pasFin2.append(row[5])
-                        pasFin3.append(row[6])
-                        pasFin4.append(row[7])
+
+                    if row[1]=='M' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<3:
+                        if row[4] != 0:
+                            cal=np.array[[row[3],row[4],row[3]*1.082*row[4],row[3]*1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                            result=np.append(result,cal,axis=0)
+                        cal1=np.array[[row[3],row[5],row[3]*1.082*row[5],row[3]*1.226*row[5],0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
+                        result=np.append(result,cal1,axis=0)
+                        if math.isnan(row[6]) == False:
+                            cal2=np.array[[row[3],row[6],row[3]*1.082*row[6],row[3]*1.226*row[6],0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]]
+                            result=np.append(result,cal2,axis=0)
+                        else :
+                            compteur+=1
+                            continue
+                        if math.isnan(row[7]) == False:
+                            cal3=np.array[[row[3],row[7],row[3]*1.082*row[7],row[3]*1.226*row[7],0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]]
+                            result=np.append(result,cal3,axis=0)
+                        else :
+                            compteur+=1
+                            continue
+                        if math.isnan(row[8]) == False :
+                            cal4=np.array[[row[3],row[8],row[3]*1.082*row[8],row[3]*1.226*row[8],0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]]
+                            result=np.append(result,cal4,axis=0)
+
 
             else:
                 if pas ==0: #if we want only "pas gros"
-                    if row[1]=='M' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax  and compteur<5:
-                        diam.append(row[2])
-                        pasGros.append(row[3])
-                else: #if we want "pas gros" and "pas fin"
-                    if row[1]=='M' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax  and compteur<5:
-                        diam.append(row[2])
-                        pasGros.append(row[3])
-                        pasFin1.append(row[4])
-                        pasFin2.append(row[5])
-                        pasFin3.append(row[6])
-                        pasFin4.append(row[7])
-        compteur+=1
 
-                
-#         reponse[i][0] = req[i][0]#diametre nominal
-#         reponse[i][1] = req[i][1]#pas
-#         reponse[i][2] = req[i][0] - 1.082 * req[i][1]#diametre de forage / percage
-#         reponse[i][3] = req[i][0] - 1.226 * req[i][1]#diametre fond de filet vis
-#         reponse[i][4] = 0.5 * req[i][1]#rayon
-#         reponse[i][5] = req[i][0] - 1.5 * req[i][1]#diametre sortie outil vis
-#         reponse[i][6] = 2 * req[i][1]#hauteur min sortie outil vis
-#         reponse[i][7] = 3 * req[i][1]#hauteur max sortie outil vis
-#         reponse[i][8] = 1.5 * req[i][1]#chanfrein
-#         reponse[i][9] = 2 * req[i][1]#hauteur min sortie outil ecrou
-#         reponse[i][10] = 4 * req[i][1]#hauteur max sortie outil ecrou
-#         reponse[i][11] = req[i][0] + 0.5 * req[i][1]#diametre sortie outil ecrou
-    
+                    if row[1]=='M' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax  and compteur<3:
+                        cal=np.array[[row[3],row[4],row[3]*1.082*row[4],row[3]*1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        result=np.append(result,cal,axis=0)
+
+                else: #if we want "pas gros" and "pas fin"
+
+                    if row[1]=='M' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax  and compteur<3:
+                        if row[4] != 0:
+                            cal=np.array[[row[3],row[4],row[3]*1.082*row[4],row[3]*1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                            result=np.append(result,cal,axis=0)
+                        cal1=np.array[[row[3],row[5],row[3]*1.082*row[5],row[3]*1.226*row[5],0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
+                        result=np.append(result,cal1,axis=0)
+                        if math.isnan(row[6]) == False:
+                            cal2=np.array[[row[3],row[6],row[3]*1.082*row[6],row[3]*1.226*row[6],0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]]
+                            result=np.append(result,cal2,axis=0)
+                        else :
+                            compteur+=1
+                            continue
+                        if math.isnan(row[7]) == False:
+                            cal3=np.array[[row[3],row[7],row[3]*1.082*row[7],row[3]*1.226*row[7],0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]]
+                            result=np.append(result,cal3,axis=0)
+                        else :
+                            compteur+=1
+                            continue
+                        if math.isnan(row[8]) == False :
+                            cal4=np.array[[row[3],row[8],row[3]*1.082*row[8],row[3]*1.226*row[8],0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]]
+                            result=np.append(result,cal4,axis=0)
+
+            compteur+=1
+    return result
+
+
+
 
 def GetWithGaz (dsup, dinf, surep, long):
     pasmax = long / 5 #car 5 fillets en prise minimum
     dmax = dsup - surep
     dmin = dinf + surep
-    diam=[]
-    pasGros=[]
-    pas = 'pasgros' #typedepas == true
+    result=np.empty((0,11)) #empty array to store the results and return it
+    compteur=0
     with open(f, 'r') as csvfile:
         reader = csv.writer(csvfile,delimiter=';')
         for row in reader:
-            if row[1]=='WG' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax:
-                diam.append(row[3])
-                pasGros.append(row[4])
+            if row[1]=='WG' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax and compteur<3:
+                diamForage = row[3] - (2 * row[4] / (3 * math.tan(math.radians(27.5))))
+                cal=np.array[[row[3],row[4],diamForage,0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                result=np.append(result,cal,axis=0)
+
+            compteur+=1
+    return result
 
 
-def GetTrapeze (dsup, dinf, surep, long):
+
+def GetTrapeze (dsup, dinf, surep, long,pas,quality):
     pasmax = long / 5 #car 5 fillets en prise minimum
     dmax = dsup - surep
     dmin = dinf + surep
-    diam=[]
-    pasGros=[]
-    pas = 'pasgros' #typedepas == true
+    result=np.empty((0,14)) #empty array to store the results and return it
     with open(f, 'r') as csvfile:
         reader = csv.writer(csvfile,delimiter=';')
+        next(reader) #skip the header
+
         for row in reader:
-            if row[1]=='T' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax:
-                diam.append(row[3])
-                pasGros.append(row[4])
+           if quality == 0: #if we want only the col 1 values
+                if pas == 0: #if we want only "pas gros"
+                    if row[1]=='T' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<3:
+                        
+                        if row[4]==1.5 :
+                            a=0.15
+                        elif row[4]<=5 :
+                            a=0.25
+                        elif row[4]<=12 :
+                            a=0.5
+                        else:
+                            a=1
+
+                        cal=np.array[[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),a,a/2,2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        result=np.append(result,cal,axis=0)
+
+                else: #if we want "pas gros" and "pas fin"
+
+                    if row[1]=='T' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<3:
+            
+                        if row[4]==1.5 :
+                            a=0.15
+                        elif row[4]<=5 :
+                            a=0.25
+                        elif row[4]<=12 :
+                            a=0.5
+                        else:
+                            a=1
+                        
+                        cal=np.array[[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),a,a/2,2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        result=np.append(result,cal,axis=0)
+                        cal1=np.array[[row[3],row[5],row[3]-2*((row[5]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),a,a/2,2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
+                        result=np.append(result,cal1,axis=0)
 
 
-def GetRond(dsup, dinf, surep, long):
+           else:
+                if pas ==0: #if we want only "pas gros"
+
+                    if row[1]=='T' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<3:
+                        
+                        if row[4]==1.5 :
+                            a=0.15
+                        elif row[4]<=5 :
+                            a=0.25
+                        elif row[4]<=12 :
+                            a=0.5
+                        else:
+                            a=1
+
+                        cal=np.array[[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),a,a/2,2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        result=np.append(result,cal,axis=0)
+
+                else: #if we want "pas gros" and "pas fin"
+
+                    if row[1]=='T' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<3:
+            
+                        if row[4]==1.5 :
+                            a=0.15
+                        elif row[4]<=5 :
+                            a=0.25
+                        elif row[4]<=12 :
+                            a=0.5
+                        else:
+                            a=1
+                        
+                        cal=np.array[[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),a,a/2,2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        result=np.append(result,cal,axis=0)
+                        cal1=np.array[[row[3],row[5],row[3]-2*((row[5]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),a,a/2,2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
+                        result=np.append(result,cal1,axis=0)
+
+           compteur+=1
+    return result
+                
+
+#     for i in req:
+#         reponse[i][0] = req[i][0]#diametre nominal
+#         reponse[i][1] = req[i][1]#pas
+#         reponse[i][2] = #diametre fond filet vis
+#         reponse[i][3] = #diametre fond filet ecrou
+#         reponse[i][4] = #diametre forage / percage
+#         reponse[i][5] = a #rayon ecrou
+#         reponse[i][6] = a/2 rayon vis
+#         reponse[i][6] = req[i][0] - 1.5 * req[i][1]#diametre sortie outil vis
+#         reponse[i][7] = 2 * req[i][1]#hauteur min sortie outil vis
+#         reponse[i][8] = 3 * req[i][1]#hauteur max sortie outil vis
+#         reponse[i][9] = 1.5 * req[i][1]#chanfrein
+#         reponse[i][10] = 2 * req[i][1]#hauteur min sortie outil ecrou
+#         reponse[i][11] = 4 * req[i][1]#hauteur max sortie outil ecrou
+#         reponse[i][12] = req[i][0] + 0.5 * req[i][1]#diametre sortie outil ecrou
+
+
+def GetRond(dsup, dinf, surep, long, pas,quality):
     pasmax = long / 5 #car 5 fillets en prise minimum
     dmax = dsup - surep
     dmin = dinf + surep
-    diam=[]
-    pasGros=[]
-    pas = 'pasgros' #typedepas == true
+    result=np.empty((0,13))
+    compteur=0
     with open(f, 'r') as csvfile:
         reader = csv.writer(csvfile,delimiter=';')
+        next(reader)
         for row in reader:
-            if row[1]=='M' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax and row[2]<3:
-                diam.append(row[3])
-                pasGros.append(row[4])
+            if quality == 0: #if we want only the col 1 values
+                if pas == 0: #if we want only "pas gros"
+                    if row[1]=='M' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<3:
+
+                        cal=np.array[[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        result=np.append(result,cal,axis=0)
+
+                else: #if we want "pas gros" and "pas fin"
+
+                    if row[1]=='M' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<3:
+                        if row[4] != 0:
+                            cal=np.array[[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                            result=np.append(result,cal,axis=0)
+                        cal1=np.array[[row[3],row[5],row[3]-row[5],row[3]+(row[5]/10),row[3]-row[5]+(row[5]/10),0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
+                        result=np.append(result,cal1,axis=0)
+                        if math.isnan(row[6]) == False:
+                            cal2=np.array[[row[3],row[6],row[3]-row[6],row[3]+(row[6]/10),row[3]-row[6]+(row[6]/10),0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]]
+                            result=np.append(result,cal2,axis=0)
+                        else :
+                            compteur+=1
+                            continue
+                        if math.isnan(row[7]) == False:
+                            cal3=np.array[[row[3],row[7],row[3]-row[7],row[3]+(row[7]/10),row[3]-row[7]+(row[7]/10),0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]]
+                            result=np.append(result,cal3,axis=0)
+                        else :
+                            compteur+=1
+                            continue
+                        if math.isnan(row[8]) == False :
+                            cal4=np.array[[row[3],row[8],row[3]-row[8],row[3]+(row[8]/10),row[3]-row[8]+(row[8]/10),0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]]
+                            result=np.append(result,cal4,axis=0)
 
 
+            else:
+                if pas ==0: #if we want only "pas gros"
+
+                    if row[1]=='M' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax and row[2]<3 and compteur<3:
+                        cal=np.array[[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        result=np.append(result,cal,axis=0)
+
+                else: #if we want "pas gros" and "pas fin"
+
+                    if row[1]=='M' and row[3]<=dmax and row[3]>=dmin and row[4]<=pasmax and row[2]<3 and compteur<3:
+                        if row[4] != 0:
+                            cal=np.array[[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                            result=np.append(result,cal,axis=0)
+                        cal1=np.array[[row[3],row[5],row[3]-row[5],row[3]+(row[5]/10),row[3]-row[5]+(row[5]/10),0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
+                        result=np.append(result,cal1,axis=0)
+                        if math.isnan(row[6]) == False:
+                            cal2=np.array[[row[3],row[6],row[3]-row[6],row[3]+(row[6]/10),row[3]-row[6]+(row[6]/10),0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]]
+                            result=np.append(result,cal2,axis=0)
+                        else :
+                            compteur+=1
+                            continue
+                        if math.isnan(row[7]) == False:
+                            cal3=np.array[[row[3],row[7],row[3]-row[7],row[3]+(row[7]/10),row[3]-row[7]+(row[7]/10),0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]]
+                            result=np.append(result,cal3,axis=0)
+                        else :
+                            compteur+=1
+                            continue
+                        if math.isnan(row[8]) == False :
+                            cal4=np.array[[row[3],row[8],row[3]-row[8],row[3]+(row[8]/10),row[3]-row[8]+(row[8]/10),0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]]
+                            result=np.append(result,cal4,axis=0)
+
+            compteur+=1
+    return result
+
+
+
+
+#     for i in req:
+#         reponse[i][0] = req[i][0]#diametre nominal
+#         reponse[i][1] = req[i][1]#pas
+#         reponse[i][2] = req[i][0] - req[i][1]#diametre fond filet vis
+#         reponse[i][3] = req[i][0] + 0.1 * req[i][1]#diametre fond filet ecrou
+#         reponse[i][4] = req[i][0] - 1.1 * req[i][1]#diametre forage / percage
+#         reponse[i][5] = 0.5 * req[i][1]#rayon
+#         reponse[i][6] = req[i][0] - 1.5 * req[i][1]#diametre sortie outil vis
+#         reponse[i][7] = 2 * req[i][1]#hauteur min sortie outil vis
+#         reponse[i][8] = 3 * req[i][1]#hauteur max sortie outil vis
+#         reponse[i][9] = 1.5 * req[i][1]#chanfrein
+#         reponse[i][10] = 2 * req[i][1]#hauteur min sortie outil ecrou
+#         reponse[i][11] = 4 * req[i][1]#hauteur max sortie outil ecrou
+#         reponse[i][12] = req[i][0] + 0.5 * req[i][1]#diametre sortie outil ecrou
                 
 # #DataBase
 
