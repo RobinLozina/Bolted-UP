@@ -2,12 +2,12 @@
 <html lang="fr">
 <head>
     <title>Concepteur de visserie</title>
-    <link rel="stylesheet" type="text/css" href="style.css"/>
-    <meta charset="UTF-8">
+<link href="static/style.css" rel="stylesheet" type="text/css"/>   
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto">
 </head>
 <body>
     <br><br>
-    <img src="gramme.png">
 
     <h1>Bienvenue !</h1>
     <h2>Ce site internet va vous permettre de vous simplifier le vie en permettant de trouver les vis qui répondent au mieux a vos exigeances</h2>
@@ -15,85 +15,131 @@
     <br><br>
 
     <h2>Pour commencer, veuillez nous renseigner sur le type de fillet : </h2>
-    <select id="typeFilet">
-        <option value="1">Filet métrique ISO</option>
-        <option value="2">Filet Withworth et Gaz</option>
-        <option value="3">Filet Trapézoïdal</option>
-        <option value="4">Filet Rond</option>
-    </select>
+    <div>
+        <form id="typeFilet">
+            <div>
+                <input type="radio" name="filet" id="typeFilet1" value="1"/>
+                    <label for="typeFilet1">Filet métrique ISO</label>
+
+                <input type="radio" name="filet" id="typeFilet2" value="2"/>
+                    <label for="typeFilet2">Filet Withworth et Gaz</label>
+
+                <input type="radio" name="filet" id="typeFilet3" value="3"/>
+                    <label for="typeFilet3">Filet Trapézoïdale</label>
+
+                <input type="radio" name="filet" id="typeFilet4" value="4"/>
+                    <label for="typeFilet4">Filet Rond</label>
+            </div>
+        </form>
+    </div>
 
     <br><br>
+    <h2>Vis ou écrou ?</h2>
+    <div>
+        <form id="typeElement">
+            <div>
+                <input type="radio" name="element" id="typeElement1" value="1"/>
+                    <label for="typeElement1">Vis</label>
+                <input type="radio" name="element" id="typeElement2" value="2"/>
+                    <label for="typeElement2">Ecrou</label>
+            </div>
+        </form>
+    </div>
 
-    <!--Lorsque le filet est Métrique-->
     <span id="metrique">
         
-        <h3>Vous avez choisi le filet métrique</h3>
+        <div id="questionTextDiv" style="display: none;">
 
-        <p>Quel est le diamètre de la vis non usinée ?</p>
-        <input type="text" id="metriquedvnu"> <!--metriquedvnu pour diamètre vis non usinée-->
-        <br>
-        <p>Quel est le diamètre de l'écrou non usiné ?</p>
-        <input type="text" id="metriquedenu"> <!--metriquedenu denu pour diametre ecrou non usiné-->
-        <br>
-        <p>Quel est la surépaisseur d'usinage ?</p>
-        <input type="text" id="metriquesurep"> <!--metriquesurep pour la suépaisseur d'usinage-->
-        <br>
-        <p>Quel est la longueur de la vis ?</p>
-        <input type="text" id="metriquelon"> <!--metriquelon pour la longueur de la vis-->
-        <br><br>
-        <button id="btnmetrique">Trouver la vis !</button>
-        <br><br>
-        <span id="messagemet"></span>
-        <br>
-        <h3>Voici les différentes vis qui sont compatibles</h3>
-        <br>
+            <div id="diamVisDiv">
+                <p>Diamètre de la vis non usinée ?</p>
+                <input type="text" id="diamVis"> 
+                <br>
+            </div>
+
+            <div id="diamEcrouDiv">
+                <p>Diamètre de l'écrou non usiné ?</p>
+                <input type="text" id="diamEcrou"> 
+                <br>
+            </div>
+
+            <div>
+                <p>Surépaisseur d'usinage ?</p>
+                <input type="text" id="surepaisseurUsinage"> 
+                <br>
+            </div>
+
+            <div>
+                <p>Longueur ?</p>
+                <input type="text" id="longueur">
+                <br>
+            </div>
+
+            <div>
+                <p>Type de pas ?</p>
+                <form id="typePas">
+                    <input type="radio" name="typePas" id="typePas1" value="1"/>
+                        <label for="typePas1">Pas gros uniquement</label>
+                    <input type="radio" name="typePas" id="typePas2" value="2"/>
+                        <label for="typePas2">Pas gros et fin</label>
+                </form>
+                <br>
+            </div>
+
+            <div>
+                <p>Type de production ?</p>
+                <form id="typeProduction">
+                    <input type="radio" name="typeProduction" id="typeProduction1" value="1"/>
+                        <label for="typeProduction1">Fréquente</label>
+                    <input type="radio" name="typeProduction" id="typeProduction2" value="2"/>
+                        <label for="typeProduction2">Tout type</label>
+                </form>
+            </div>
+            
+            <br><br>
+            <button id="btnSend">Trouver la vis !</button>
+            <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+            <script src="app.js"></script>
+        </div>
+
+        <div>
+            <br><br>
+            <span id="errorMessage"></span>
+            <br>
+        </div>
+        <div id="resultat" style="display: none;">
+            <h3>Voici les différentes vis qui sont compatibles</h3>
+            <br>
         
-        <table>
-            <thead>
-                <tr>
-                    <th>d nominal</th>
-                    <th>Pas</th>
-                    <th>D1 forage/percage</th>
-                    <th>d3 fond filet vis</th>
-                    <th>Rayon</th>
-                    <th>d sortie outil vis</th>
-                    <th>h min sortie outil vis</th>
-                    <th>h max sortie outil vis</th>
-                    <th>chanfrein</th>
-                    <th>h min sortie outil ecrou</th>
-                    <th>h max sortie outil ecrou</th>
-                    <th>d sortie outil ecrou</th>
-                </tr>
-            </thead>
-            <tbody id="tabmetrique">
-                
-            </tbody>
-        </table>
+            <table>
 
+                 <tr>   <th>d nominal</th><th>Pas</th><th>D1 forage/percage</th><th id="FFecrou">D2 fond de filet ecrou</th><th>d3 fond filet vis</th><th>Rayon</th><th>d sortie outil vis</th><th>h min sortie outil vis</th><th>h max sortie outil vis</th><th>chanfrein</th><th>d sortie outil ecrou</th><th>h min sortie outil ecrou</th><th>h max sortie outil ecrou</th>    </tr>
+
+            </table id="tableau">
+        </div>
         <br>
-        <p>Attention ! n'oubliez pas de vérifier a ce que la vis soit bien réalisable. Les parois ne sont elles pas trop fines ? il y a-t-il assez de matière ? Tout cela dépends de votre projet.</p>
+       
 
 
 
     </span>
 
     <!--Lorsque le filet est Withworth et Gaz-->    
-    <span id="withgaz">
+    <!-- <span id="withgaz">
         
         <h3>Vous avez choisi les filets withworth et gaz</h3>
 
         <p>Quel est le diamètre de la vis non usinée ?</p>
-        <input type="text" id="withgazdvnu"> <!--withgazdvnu pour diamètre vis non usinée-->
+        <input type="text" id="withgazdvnu"> 
         <br>
         <p>Quel est le diamètre de l'écrou non usiné ?</p>
-        <input type="text" id="withgazdenu"> <!--withgazdenu denu pour diametre ecrou non usiné-->
+        <input type="text" id="withgazdenu">
         <br>
         <p>Quel est la surépaisseur d'usinage ?</p>
-        <input type="text" id="withgazsurep"> <!--withgazsurep pour la suépaisseur d'usinage-->
+        <input type="text" id="withgazsurep">
         <br>
         <p>Quel est la longueur de la vis ?</p>
-        <input type="text" id="withgazlon"> <!--withgazlon pour la longueur de la vis-->
-        <br><br>
+        <input type="text" id="withgazlon"> -->
+        <!-- <br><br>
         <button id="btnwithgaz">Trouver la vis !</button>
         <br><br>
         <span id="messagewithgaz"></span>
@@ -125,26 +171,26 @@
         <br>
         <p>Attention ! n'oubliez pas de vérifier a ce que la vis soit bien réalisable. Les parois ne sont elles pas trop fines ? il y a-t-il assez de matière ? Tout cela dépends de votre projet.</p>
 
-    </span>
+    </span> -->
 
     <!--Lorsque le filet est Trapézoïdal-->
-    <span id="trap">
+    <!-- <span id="trap">
 
         <h3>Vous avez choisi le filet trapézoïdal</h3>
 
         <p>Quel est le diamètre de la vis non usinée ?</p>
-        <input type="text" id="trapdvnu"> <!--trapdvnu pour diamètre vis non usinée-->
+        <input type="text" id="trapdvnu">
         <br>
         <p>Quel est le diamètre de l'écrou non usiné ?</p>
-        <input type="text" id="trapdenu"> <!--trapdenu denu pour diametre ecrou non usiné-->
+        <input type="text" id="trapdenu"> 
         <br>
         <p>Quel est la surépaisseur d'usinage ?</p>
-        <input type="text" id="trapsurep"> <!--trapsurep pour la suépaisseur d'usinage-->
+        <input type="text" id="trapsurep"> 
         <br>
         <p>Quel est la longueur de la vis ?</p>
-        <input type="text" id="traplon"> <!--traplon pour la longueur de la vis-->
-        <br><br>
-        <button id="btntrap">Trouver la vis !</button>
+        <input type="text" id="traplon">
+        <br><br> -->
+        <!-- <button id="btntrap">Trouver la vis !</button>
         <br><br>
         <span id="messagetrap"></span>
         <br>
@@ -152,9 +198,9 @@
         <br>
 
         <table>
-            <thead>
-                <tr>
-                    <th>d nominal</th>
+            <thead> 
+                <tr>  -->
+                    <!-- <th>d nominal</th>
                     <th>Pas</th>
                     <th>d1 fond filet vis</th>
                     <th>d2 fond filet ecrou</th>
@@ -180,22 +226,22 @@
 
     </span>
 
-    <!--Lorsque le filet est Rond-->
-    <span id="rond">
+    Lorsque le filet est Rond
+     <span id="rond">
 
         <h3>Vous avez choisi le filet rond</h3>
 
         <p>Quel est le diamètre de la vis non usinée ?</p>
-        <input type="text" id="ronddvnu"> <!--ronddvnu pour diamètre vis non usinée-->
+        <input type="text" id="ronddvnu"> 
         <br>
         <p>Quel est le diamètre de l'écrou non usiné ?</p>
-        <input type="text" id="ronddenu"> <!--ronddenu denu pour diametre ecrou non usiné-->
+        <input type="text" id="ronddenu"> 
         <br>
         <p>Quel est la surépaisseur d'usinage ?</p>
-        <input type="text" id="rondsurep"> <!--rondsurep pour la suépaisseur d'usinage-->
+        <input type="text" id="rondsurep"> 
         <br>
         <p>Quel est la longueur de la vis ?</p>
-        <input type="text" id="rondlon"> <!--rondlon pour la longueur de la vis-->
+        <input type="text" id="rondlon"> 
         <br><br>
         <button id="btnrond">Trouver la vis !</button>
         <br><br>
@@ -217,8 +263,8 @@
                     <th>h min sortie outil vis</th>
                     <th>h max sortie outil vis</th>
                     <th>chanfrein</th>
-                    <th>h min sortie outil ecrou</th>
-                    <th>h max sortie outil ecrou</th>
+                    <th>h min sortie outil ecrou</th> --> 
+                    <!-- <th>h max sortie outil ecrou</th>
                     <th>d sortie outil ecrou</th>
                 </tr>
             </thead>
@@ -231,9 +277,9 @@
         <p>Attention ! n'oubliez pas de vérifier a ce que la vis soit bien réalisable. Les parois ne sont elles pas trop fines ? il y a-t-il assez de matière ? Tout cela dépends de votre projet.</p>
 
 
-    </span>
+    </span> 
 
-    <span id="errormessage"></span>
+    <span id="errormessage"></span> -->
 
 
 
