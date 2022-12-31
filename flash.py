@@ -5,7 +5,7 @@ import time
 import math
 import struct 
 import csv
-import Numpy as np
+import numpy as np
 
 
 #Serveur
@@ -34,20 +34,28 @@ def javascript():
 def getmetriqueweb():
     donnees = request.get_data()
     infos = json.loads(donnees)
+    print("into getmetrique")
     if infos['element'] ==0:
+        print("vis")
         result = GetMetriqueVis(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'], infos['quality'])
+
     elif infos['element'] ==1:
+        print("ecrou")
         result = GetMetriqueEcrou(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'], infos['quality'])
     #dvnu pour diametre vis non usiné et denu pour diametre ecrou non usiné
+
     return json.dumps(result)
 
 @app.route('/GetwithGaz', methods = [ 'POST' ])
 def getwithgazweb():
     donnees = request.get_data()
     infos = json.loads(donnees)
+    print("into getwithgaz")
     if infos['element'] ==0:
+        print("vis")
         result = GetwithGazVis(infos['dvnu'], infos['denu'], infos['surep'], infos['long'])
     elif infos['element'] ==1:
+        print("ecrou")
         result = GetWithGazEcrou(infos['dvnu'], infos['denu'], infos['surep'], infos['long'])
     return json.dumps(result)
 
@@ -55,9 +63,12 @@ def getwithgazweb():
 def gettrapezeweb():
     donnees = request.get_data()
     infos = json.loads(donnees)
+    print("into gettrapeze")
     if infos['element'] ==0:
+        print("vis")
         result = GetTrapezeVis(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'], infos['quality'])
     elif infos['element'] ==1:
+        print("ecrou")
         result = GetTrapezeEcrou(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'], infos['quality'])
     return json.dumps(result)
 
@@ -65,9 +76,12 @@ def gettrapezeweb():
 def getrondweb():
     donnees = request.get_data()
     infos = json.loads(donnees)
+    print("into getrond")
     if infos['element'] ==0:
+        print("vis")
         result = GetRondVis(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'], infos['quality'])
     elif infos['element'] ==1:
+        print("ecrou")
         result = GetRondEcrou(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'], infos['quality'])
     return json.dumps(result)
 
@@ -854,5 +868,4 @@ def GetRondEcrou (dsup, dinf, surep, long, pas,quality):
 
 
 if __name__ == '__main__':
-    Initialize()
     app.run(debug = True)

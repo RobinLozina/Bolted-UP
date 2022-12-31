@@ -1,21 +1,29 @@
+/* Sending data to the server and receiving a response. */
 $('#btnSend').click(function(){
 
+    /* Checking if the diamVis and diamEcrou are empty and if the surepaisseurUsinage and longueur are
+    empty. If they are empty, it will display an error message. */
     if(($('#diamVis').val() == '' && $('#diamEcrou').val() == '') || $('#surepaisseurUsinage').val() == '' || $('#longueur').val() == '' ){
         $('#errorMessage').html('<p>Veuillez remplir tous les champs !</p>');
     }
     else{
+        /* Sending a POST request to the server. */
         if(document.getElementById('typeFilet1').checked){ // Si le type de filet est métrique 
+            console.log("Metrique");
             var typePas = 0; 
             if(document.getElementById('typePas2').checked){
                 typePas = 1;
+                console.log("Pas fin");
             }
             var quality = 0; 
             if(document.getElementById('typeProduction2').checked){
                 quality = 1;
+                console.log("Qualité");
             }
             var element = 0; // 0 = vis, 1 = ecrou
             if(document.getElementById('typeElement2').checked){
                 element = 1;
+                console.log("Ecrou");
             }
 
            var data = {
@@ -41,7 +49,7 @@ $('#btnSend').click(function(){
         }
 
         else if(document.getElementById('typeFilet2').checked){ // Si le type de filet est Withworth ou Gaz
-
+            console.log("Withworth");
             var element = 0; // 0 = vis, 1 = ecrou
             if(document.getElementById('typeElement2').checked){
                 element = 1;
@@ -68,6 +76,7 @@ $('#btnSend').click(function(){
         
 
         else if(document.getElementById('typeFilet3').checked){ // Si le type de filet est Trapézoïdal
+            console.log("Trapeze");
             var typePas = 0;
             if(document.getElementById('typePas2').checked){
                 typePas = 1;
@@ -105,6 +114,7 @@ $('#btnSend').click(function(){
         
 
         else {                                                  // Si le type de filet est Rond
+            console.log("Rond");
             var typePas = 0;
             if(document.getElementById('typePas2').checked){
                 typePas = 1;
@@ -221,6 +231,9 @@ function AfficherTableau(reponse) {
     if(reponse[0].length == 11){           // Si le type de filet est WithGaz
         if(document.getElementById('typeElement1').checked){    // Si le type d'élément est une vis
             $('#FFecrou').hide();
+            $('#diamSortieEcrou').hide();
+            $('#hauteurMinEcrou').hide();
+            $('#hauteurMaxEcrou').hide();
             // HIDE TOUS LES TRUCS A HIDE
             for(let i=0;i<=reponse.length;i++){
                 var row = tableau.insertRow(compteur);
@@ -252,7 +265,9 @@ function AfficherTableau(reponse) {
         }
         else if(document.getElementById('typeElement2').checked){    // Si le type d'élément est un ecrou
             $('#FFecrou').hide();
-                        // HIDE TOUS LES TRUCS A HIDE
+            $('#diamSortieVis').hide();
+            $('#hauteurMinVis').hide();
+            $('#hauteurMaxVis').hide();
             for(let i=0;i<=reponse.length;i++){
                 var row = tableau.insertRow(compteur);
 
@@ -290,7 +305,10 @@ function AfficherTableau(reponse) {
     else if(reponse[0].length == 12){      // Si le type de filet est Metrique
         if(document.getElementById('typeElement1').checked){    // Si le type d'élément est une vis
                         // HIDE TOUS LES TRUCS A HIDE
-
+            $('#FFecrou').hide();
+            $('#diamSortieEcrou').hide();
+            $('#hauteurMinEcrou').hide();
+            $('#hauteurMaxEcrou').hide();
             for(let i=0;i<=response.length;i++){
                 var row = tableau.insertRow(compteur);
 
@@ -319,7 +337,10 @@ function AfficherTableau(reponse) {
             compteur++;
         }
         else if(document.getElementById('typeElement2').checked){    // Si le type d'élément est un ecrou
-                        // HIDE TOUS LES TRUCS A HIDE
+            $('#FFecrou').hide();
+            $('#diamSortieVis').hide();
+            $('#hauteurMinVis').hide();
+            $('#hauteurMaxVis').hide();
 
             for(let i=0;i<=response.length;i++){
                 var row = tableau.insertRow(compteur);
@@ -354,6 +375,9 @@ function AfficherTableau(reponse) {
     else if(reponse[0].length == 13){      // Si le type de filet est Rond
         if(document.getElementById('typeElement1').checked){    // Si le type d'élément est une vis
              // HIDE TOUS LES TRUCS A HIDE
+            $('#diamSortieEcrou').hide();
+            $('#hauteurMinEcrou').hide();
+            $('#hauteurMaxEcrou').hide();
             for(let i=0;i<=response.length;i++){
                 var row = tableau.insertRow(compteur);
 
@@ -386,6 +410,9 @@ function AfficherTableau(reponse) {
         }
         else if(document.getElementById('typeElement2').checked){    // Si le type d'élément est un ecrou
              // HIDE TOUS LES TRUCS A HIDE
+            $('#diamSortieVis').hide();
+            $('#hauteurMinVis').hide();
+            $('#hauteurMaxVis').hide();
             for(let i=0;i<=response.length;i++){
                 var row = tableau.insertRow(compteur);
 
@@ -418,8 +445,12 @@ function AfficherTableau(reponse) {
     else if(reponse[0].length == 14){      // Si le type de filet est Trapézoïdal
         if(document.getElementById('typeElement1').checked){    // Si le type d'élément est une vis
              // HIDE TOUS LES TRUCS A HIDE
-
+            $('#diamSortieEcrou').hide();
+            $('#hauteurMinEcrou').hide();
+            $('#hauteurMaxEcrou').hide();
             for(let i=0;i<=response.length;i++){
+                var row = tableau.insertRow(compteur);
+
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);  
                 var cell3 = row.insertCell(2);
@@ -449,7 +480,12 @@ function AfficherTableau(reponse) {
         }
         else if(document.getElementById('typeElement2').checked){    // Si le type d'élément est un ecrou
              // HIDE TOUS LES TRUCS A HIDE
+            $('#diamSortieVis').hide();
+            $('#hauteurMinVis').hide();
+            $('#hauteurMaxVis').hide();
             for(let i=0;i<=response.length;i++){
+                var row = tableau.insertRow(compteur);
+
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);  
                 var cell3 = row.insertCell(2);
@@ -477,5 +513,6 @@ function AfficherTableau(reponse) {
             compteur++;
         }
     }
+    $('#resultat').show();
     return 
 }
