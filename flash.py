@@ -37,26 +37,26 @@ def getmetriqueweb():
     print("into getmetrique")
     if infos['element'] ==0:
         print("vis")
-        result = GetMetriqueVis(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'], infos['quality'])
+        result = GetMetriqueVis((infos['dvnu']), (infos['surep']), (infos['long']), int(infos['pas']), int(infos['quality']))
 
     elif infos['element'] ==1:
         print("ecrou")
-        result = GetMetriqueEcrou(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'], infos['quality'])
+        result = GetMetriqueEcrou((infos['denu']), (infos['surep']), (infos['long']), int(infos['pas']), int(infos['quality']))
     #dvnu pour diametre vis non usiné et denu pour diametre ecrou non usiné
 
     return json.dumps(result)
 
-@app.route('/GetwithGaz', methods = [ 'POST' ])
+@app.route('/GetWithGaz', methods = [ 'POST' ])
 def getwithgazweb():
     donnees = request.get_data()
     infos = json.loads(donnees)
     print("into getwithgaz")
     if infos['element'] ==0:
         print("vis")
-        result = GetwithGazVis(infos['dvnu'], infos['denu'], infos['surep'], infos['long'])
+        result = GetwithGazVis((infos['dvnu']), (infos['surep']), (infos['long']))
     elif infos['element'] ==1:
         print("ecrou")
-        result = GetWithGazEcrou(infos['dvnu'], infos['denu'], infos['surep'], infos['long'])
+        result = GetWithGazEcrou((infos['denu']), (infos['surep']), (infos['long']))
     return json.dumps(result)
 
 @app.route('/GetTrapeze', methods = [ 'POST' ])
@@ -66,10 +66,10 @@ def gettrapezeweb():
     print("into gettrapeze")
     if infos['element'] ==0:
         print("vis")
-        result = GetTrapezeVis(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'], infos['quality'])
+        result = GetTrapezeVis((infos['dvnu']), (infos['surep']), (infos['long']), int(infos['pas']), int(infos['quality']))
     elif infos['element'] ==1:
         print("ecrou")
-        result = GetTrapezeEcrou(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'], infos['quality'])
+        result = GetTrapezeEcrou((infos['denu']), (infos['surep']), (infos['long']), int(infos['pas']), int(infos['quality']))
     return json.dumps(result)
 
 @app.route('/GetRond', methods = [ 'POST' ])
@@ -79,10 +79,10 @@ def getrondweb():
     print("into getrond")
     if infos['element'] ==0:
         print("vis")
-        result = GetRondVis(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'], infos['quality'])
+        result = GetRondVis((infos['dvnu']), (infos['surep']), (infos['long']), int(infos['pas']), int(infos['quality']))
     elif infos['element'] ==1:
         print("ecrou")
-        result = GetRondEcrou(infos['dvnu'], infos['denu'], infos['surep'], infos['long'], infos['pas'], infos['quality'])
+        result = GetRondEcrou((infos['denu']), (infos['surep']), (infos['long']), int(infos['pas']), int(infos['quality']))
     return json.dumps(result)
 
 
@@ -91,22 +91,28 @@ def getrondweb():
 f="csvDB.csv"
 
 
-def GetMetriqueVis(dsup, dinf, surep, long,pas,quality):
+def GetMetriqueVis(dsup, surep, long,pas,quality):
+    dsup=float(dsup)
+    surep=float(surep)
+    long=float(long)
     pasmax = long / 5 #car 5 fillets en prise minimum
     dmax = dsup - surep
-    dmin = dinf + surep
     compteur = 0
-    result=np.empty((0,12)) #empty array to store the results and return it
+    result=np.empty((0,12)) #empty array( to store the results and return it
     with open(f, 'r') as csvfile:
         reader = csv.reader(csvfile,delimiter=';')
         next(reader) #skip header line
         for row in reversed(list(reader)):
+            
+            row[3]=float(row[3])
+            row[4]=float(row[4])   
+            row[2]=int(row[2])
 
             if quality == 0: #if we want only the col 1 values
                 if pas == 0: #if we want only "pas gros"
 
                     if (row[1]=='M' and row[4]<=pasmax and row[2]==1 and compteur<4 and row[3]<=dmax):
-                        cal=np.array[[row[3],row[4],row[3]*1.082*row[4],row[3]*1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([[row[3],row[4],row[3]-1.082*row[4],row[3]-1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
                         compteur+=1
 
@@ -115,29 +121,33 @@ def GetMetriqueVis(dsup, dinf, surep, long,pas,quality):
 
                     if (row[1]=='M' and row[4]<=pasmax and row[2]==1 and compteur<4 and row[3]<=dmax):
 
-                        if row[4] != 0:
-                            cal=np.array[[row[3],row[4],row[3]*1.082*row[4],row[3]*1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        if row[4] != "0":
+                            cal=np.array([[row[3],row[4],row[3]-1.082*row[4],row[3]-1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                             result=np.append(result,cal,axis=0)
 
-                        cal1=np.array[[row[3],row[5],row[3]*1.082*row[5],row[3]*1.226*row[5],0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
+                        row[5]=float(row[5])
+                        cal1=np.array([[row[3],row[5],row[3]-1.082*row[5],row[3]-1.226*row[5],0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]])
                         result=np.append(result,cal1,axis=0)
 
-                        if math.isnan(row[6]) == False:
-                            cal2=np.array[[row[3],row[6],row[3]*1.082*row[6],row[3]*1.226*row[6],0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]]
+                        if row[6] != "":
+                            row[6]=float(row[6])
+                            cal2=np.array([[row[3],row[6],row[3]-1.082*row[6],row[3]-1.226*row[6],0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]])
                             result=np.append(result,cal2,axis=0)
                         else :
                             compteur+=1
                             continue
 
-                        if math.isnan(row[7]) == False:
-                            cal3=np.array[[row[3],row[7],row[3]*1.082*row[7],row[3]*1.226*row[7],0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]]
+                        if row[7] != "":
+                            row[7]=float(row[7])
+                            cal3=np.array([[row[3],row[7],row[3]-1.082*row[7],row[3]-1.226*row[7],0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]])
                             result=np.append(result,cal3,axis=0)
                         else :
                             compteur+=1
                             continue
 
-                        if math.isnan(row[8]) == False :
-                            cal4=np.array[[row[3],row[8],row[3]*1.082*row[8],row[3]*1.226*row[8],0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]]
+                        if row[8] != "" :
+                            row[8]=float(row[8])
+                            cal4=np.array([[row[3],row[8],row[3]-1.082*row[8],row[3]-1.226*row[8],0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]])
                             result=np.append(result,cal4,axis=0)
                             compteur+=1
                         else :
@@ -149,9 +159,9 @@ def GetMetriqueVis(dsup, dinf, surep, long,pas,quality):
 
                 if pas ==0: #if we want only "pas gros"
 
-                    if (row[1]=='M' and row[4]<=pasmax  and compteur<4 and row[3]<=dmax):
+                    if (row[1]=='M' and row[4]<=pasmax  and compteur<4 and row[3]<=dmax and row[4]!=0):
 
-                        cal=np.array[[row[3],row[4],row[3]*1.082*row[4],row[3]*1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([[row[3],row[4],row[3]-1.082*row[4],row[3]-1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
                         compteur+=1
 
@@ -159,57 +169,67 @@ def GetMetriqueVis(dsup, dinf, surep, long,pas,quality):
 
                     if (row[1]=='M' and row[4]<=pasmax and compteur<4 and row[3]<=dmax):
 
-                        if row[4] != 0:
-                            cal=np.array[[row[3],row[4],row[3]*1.082*row[4],row[3]*1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        if row[4] != "0":
+                            cal=np.array([[row[3],row[4],row[3]-1.082*row[4],row[3]-1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                             result=np.append(result,cal,axis=0)
 
-                        cal1=np.array[[row[3],row[5],row[3]*1.082*row[5],row[3]*1.226*row[5],0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
+                        row[5]=float(row[5])
+                        cal1=np.array([[row[3],row[5],row[3]-1.082*row[5],row[3]-1.226*row[5],0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]])
                         result=np.append(result,cal1,axis=0)
 
-                        if math.isnan(row[6]) == False:
-                            cal2=np.array[[row[3],row[6],row[3]*1.082*row[6],row[3]*1.226*row[6],0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]]
+                        if row[6] != "":
+                            row[6]=float(row[6])
+                            cal2=np.array([[row[3],row[6],row[3]-1.082*row[6],row[3]-1.226*row[6],0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]])
                             result=np.append(result,cal2,axis=0)
                         else :
                             compteur+=1
                             continue
 
-                        if math.isnan(row[7]) == False:
-                            cal3=np.array[[row[3],row[7],row[3]*1.082*row[7],row[3]*1.226*row[7],0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]]
+                        if row[7] != "":
+                            row[7]=float(row[7])
+                            cal3=np.array([[row[3],row[7],row[3]-1.082*row[7],row[3]-1.226*row[7],0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]])
                             result=np.append(result,cal3,axis=0)
                         else :
                             compteur+=1
                             continue
 
-                        if math.isnan(row[8]) == False :
-                            cal4=np.array[[row[3],row[8],row[3]*1.082*row[8],row[3]*1.226*row[8],0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]]
+                        if row[8] != "" :
+                            row[8]=float(row[8])
+                            cal4=np.array([[row[3],row[8],row[3]-1.082*row[8],row[3]-1.226*row[8],0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]])
                             result=np.append(result,cal4,axis=0)
                             compteur+=1
                         else :
                             compteur+=1
                             continue
-
-    return result 
-
-
+    print (result)
+    return result.tolist()
 
 
-def GetMetriqueEcrou(dsup, dinf, surep, long,pas,quality):
+
+
+def GetMetriqueEcrou(dinf, surep, long,pas,quality):
+    dinf=float(dinf)
+    surep=float(surep)
+    long=float(long)
     pasmax = long / 5 #car 5 fillets en prise minimum
-    dmax = dsup - surep
+    # dmax = dsup - surep
     dmin = dinf + surep
     compteur=0
-    result=np.empty((0,12)) #empty array to store the results and return it
+    result=np.empty((0,12)) #empty array( to store the results and return it
     with open(f, 'r') as csvfile:
         reader = csv.reader(csvfile,delimiter=';')
         next(reader) #skip header line
         for row in reader:
+            row[3]=float(row[3])
+            row[4]=float(row[4])   
+            row[2]=int(row[2])
 
             if quality == 0: #if we want only the col 1 values
 
                 if pas == 0: #if we want only "pas gros"
-
+            
                     if (row[1]=='M' and row[4]<=pasmax and row[2]==1 and row[3]>=dmin and compteur<4):
-                        cal=np.array[[row[3],row[4],row[3]*1.082*row[4],row[3]*1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([[row[3],row[4],row[3]-1.082*row[4],row[3]-1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
                         compteur+=1
 
@@ -217,29 +237,33 @@ def GetMetriqueEcrou(dsup, dinf, surep, long,pas,quality):
 
                     if (row[1]=='M' and row[4]<=pasmax and row[2]==1 and row[3]>=dmin and compteur<4):
 
-                        if row[4] != 0:
-                            cal=np.array[[row[3],row[4],row[3]*1.082*row[4],row[3]*1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        if row[4] != "0":
+                            cal=np.array([[row[3],row[4],row[3]-1.082*row[4],row[3]-1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                             result=np.append(result,cal,axis=0)
 
-                        cal1=np.array[[row[3],row[5],row[3]*1.082*row[5],row[3]*1.226*row[5],0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
+                        row[5]=float(row[5])
+                        cal1=np.array([[row[3],row[5],row[3]-1.082*row[5],row[3]-1.226*row[5],0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]])
                         result=np.append(result,cal1,axis=0)
 
-                        if math.isnan(row[6]) == False:
-                            cal2=np.array[[row[3],row[6],row[3]*1.082*row[6],row[3]*1.226*row[6],0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]]
+                        if row[6] != "":
+                            row[6]=float(row[6])
+                            cal2=np.array([[row[3],row[6],row[3]-1.082*row[6],row[3]-1.226*row[6],0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]])
                             result=np.append(result,cal2,axis=0)
                         else :
                             compteur+=1
                             continue
 
-                        if math.isnan(row[7]) == False:
-                            cal3=np.array[[row[3],row[7],row[3]*1.082*row[7],row[3]*1.226*row[7],0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]]
+                        if row[7] != "":
+                            row[7]=float(row[7])
+                            cal3=np.array([[row[3],row[7],row[3]-1.082*row[7],row[3]-1.226*row[7],0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]])
                             result=np.append(result,cal3,axis=0)
                         else :
                             compteur+=1
                             continue
 
-                        if math.isnan(row[8]) == False :
-                            cal4=np.array[[row[3],row[8],row[3]*1.082*row[8],row[3]*1.226*row[8],0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]]
+                        if row[8] != "" :
+                            row[8]=float(row[8])
+                            cal4=np.array([[row[3],row[8],row[3]-1.082*row[8],row[3]-1.226*row[8],0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]])
                             result=np.append(result,cal4,axis=0)
                             compteur+=1
                         else :
@@ -252,8 +276,8 @@ def GetMetriqueEcrou(dsup, dinf, surep, long,pas,quality):
 
                 if pas ==0: #if we want only "pas gros"
 
-                    if (row[1]=='M' and row[4]<=pasmax and row[3]>=dmin and compteur<4):
-                        cal=np.array[[row[3],row[4],row[3]*1.082*row[4],row[3]*1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                    if (row[1]=='M' and row[4]<=pasmax and row[3]>=dmin and compteur<4 and row[4]!=0):
+                        cal=np.array([[row[3],row[4],row[3]-1.082*row[4],row[3]-1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
                         compteur+=1
 
@@ -261,29 +285,33 @@ def GetMetriqueEcrou(dsup, dinf, surep, long,pas,quality):
 
                     if (row[1]=='M' and row[4]<=pasmax and row[3]>=dmin and compteur<4):
 
-                        if row[4] != 0:
-                            cal=np.array[[row[3],row[4],row[3]*1.082*row[4],row[3]*1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        if row[4] != "0":
+                            cal=np.array([[row[3],row[4],row[3]-1.082*row[4],row[3]-1.226*row[4],0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                             result=np.append(result,cal,axis=0)
                         
-                        cal1=np.array[[row[3],row[5],row[3]*1.082*row[5],row[3]*1.226*row[5],0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
+                        row[5]=float(row[5])
+                        cal1=np.array([[row[3],row[5],row[3]-1.082*row[5],row[3]-1.226*row[5],0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]])
                         result=np.append(result,cal1,axis=0)
 
-                        if math.isnan(row[6]) == False:
-                            cal2=np.array[[row[3],row[6],row[3]*1.082*row[6],row[3]*1.226*row[6],0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]]
+                        if row[6] != "":
+                            row[6]=float(row[6])
+                            cal2=np.array([[row[3],row[6],row[3]-1.082*row[6],row[3]-1.226*row[6],0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]])
                             result=np.append(result,cal2,axis=0)
                         else :
                             compteur+=1  
                             continue
 
-                        if math.isnan(row[7]) == False:
-                            cal3=np.array[[row[3],row[7],row[3]*1.082*row[7],row[3]*1.226*row[7],0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]]
+                        if row[7] != "":
+                            row[7]=float(row[7])
+                            cal3=np.array([[row[3],row[7],row[3]-1.082*row[7],row[3]-1.226*row[7],0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]])
                             result=np.append(result,cal3,axis=0)
                         else :
                             compteur+=1 
                             continue
 
-                        if math.isnan(row[8]) == False :
-                            cal4=np.array[[row[3],row[8],row[3]*1.082*row[8],row[3]*1.226*row[8],0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]]
+                        if row[8] != "" :
+                            row[8]=float(row[8])
+                            cal4=np.array([[row[3],row[8],row[3]-1.082*row[8],row[3]-1.226*row[8],0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]])
                             result=np.append(result,cal4,axis=0)
                             compteur+=1
                         else :
@@ -291,49 +319,68 @@ def GetMetriqueEcrou(dsup, dinf, surep, long,pas,quality):
                             continue
                         
                     
-            
-    return result
+    print (result)
+    return result.tolist()
 
 
-def GetwithGazVis (dsup, dinf, surep, long):
+def GetwithGazVis (dsup, surep, long):
+    dsup=float(dsup)
+    surep=float(surep)
+    long=float(long)
     pasmax = long / 5 #car 5 fillets en prise minimum
     dmax = dsup - surep
-    dmin = dinf + surep
     compteur=0
-    result=np.empty((0,11)) #empty array to store the results and return it
+    result=np.empty((0,11)) #empty array( to store the results and return it
     with open(f, 'r') as csvfile:
         reader = csv.reader(csvfile,delimiter=';')
+        next(reader) #skip the first line
         for row in reversed(list(reader)):
+
+            row[3]=float(row[3])
+            row[4]=float(row[4])   
+            row[2]=int(row[2])
+
             if row[1]=='WG' and row[3]<=dmax and row[4]<=pasmax and compteur<3:
                 diamForage = row[3] - (2 * row[4] / (3 * math.tan(math.radians(27.5))))
-                cal=np.array[[row[3],row[4],diamForage,0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                cal=np.array([[row[3],row[4],diamForage,0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                 result=np.append(result,cal,axis=0)
                 compteur+=1
 
-    return result
+    print (result)
+    return result.tolist()
 
-def GetWithGazEcrou (dsup, dinf, surep, long):
+def GetWithGazEcrou (dinf, surep, long):
+    dinf=float(dinf)
+    surep=float(surep)
+    long=float(long)
     pasmax = long / 5 #car 5 fillets en prise minimum
-    dmax = dsup - surep
     dmin = dinf + surep
     compteur=0
     result=np.empty((0,11)) #empty array to store the results and return it
     with open(f, 'r') as csvfile:
         reader = csv.reader(csvfile,delimiter=';')
+        next(reader) #skip the first line
         for row in reader:
+            row[3]=float(row[3])
+            row[4]=float(row[4])   
+            row[2]=int(row[2])
+
             if row[1]=='WG' and row[3]>=dmin and row[4]<=pasmax and compteur<3:
                 diamForage = row[3] - (2 * row[4] / (3 * math.tan(math.radians(27.5))))
-                cal=np.array[[row[3],row[4],diamForage,0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                cal=np.array([[row[3],row[4],diamForage,0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                 result=np.append(result,cal,axis=0)
                 compteur+=1
 
-    return result
+    print (result)
+    return result.tolist()
 
 
-def GetTrapezeVis (dsup, dinf, surep, long,pas,quality):
+def GetTrapezeVis (dsup, surep, long,pas,quality):
+    dsup=float(dsup)
+    surep=float(surep)
+    long=float(long)
     pasmax = long / 5 #car 5 fillets en prise minimum
     dmax = dsup - surep
-    dmin = dinf + surep
     compteur=0
     result=np.empty((0,14)) #empty array to store the results and return it
     with open(f, 'r') as csvfile:
@@ -341,6 +388,10 @@ def GetTrapezeVis (dsup, dinf, surep, long,pas,quality):
         next(reader) #skip the header
 
         for row in reversed(list(reader)):
+           row[3]=float(row[3])
+           row[4]=float(row[4])   
+           row[2]=int(row[2])
+
            if quality == 0: #if we want only the col 1 values
                 if pas == 0: #if we want only "pas gros"
                     if row[1]=='T' and row[3]<=dmax and row[4]<=pasmax and row[2]==1 and compteur<3:
@@ -354,7 +405,7 @@ def GetTrapezeVis (dsup, dinf, surep, long,pas,quality):
                         else:
                             a=1
 
-                        cal=np.array[[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),row[4]*0.5,a/2,2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[4]/2),row[4]*0.5,a/2,row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
                         compteur+=1
 
@@ -371,16 +422,21 @@ def GetTrapezeVis (dsup, dinf, surep, long,pas,quality):
                         else:
                             a=1
                         
-                        cal=np.array[[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),row[4]*0.5,a/2,2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[4]/2),row[4]*0.5,a/2,row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]])
                         result=np.append(result,cal,axis=0)
-                        cal1=np.array[[row[3],row[5],row[3]-2*((row[5]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),row[4]*0.5,a/2,2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
-                        result=np.append(result,cal1,axis=0)
-                        compteur+=1
+                        if row[5] != "":
+                            row[5]=float(row[5])
+                            cal1=np.array([[row[3],row[5],row[3]-2*((row[5]/2)+a),row[3]+2*a,row[3]-2*(row[5]/2),row[4]*0.5,a/2,row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]])
+                            result=np.append(result,cal1,axis=0)
+                            compteur+=1
+                        else :
+                            compteur+=1
+                            continue
 
            else:
                 if pas ==0: #if we want only "pas gros"
 
-                    if row[1]=='T' and row[3]<=dmax and row[4]<=pasmax and row[2]==1 and compteur<3:
+                    if row[1]=='T' and row[3]<=dmax and row[4]<=pasmax and compteur<3:
                         
                         if row[4]==1.5 :
                             a=0.15
@@ -391,13 +447,13 @@ def GetTrapezeVis (dsup, dinf, surep, long,pas,quality):
                         else:
                             a=1
 
-                        cal=np.array[[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),row[4]*0.5,a/2,2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[4]/2),row[4]*0.5,a/2,row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
                         compteur+=1
 
                 else: #if we want "pas gros" and "pas fin"
 
-                    if row[1]=='T' and row[3]<=dmax and row[4]<=pasmax and row[2]==1 and compteur<3:
+                    if row[1]=='T' and row[3]<=dmax and row[4]<=pasmax and compteur<3:
             
                         if row[4]==1.5 :
                             a=0.15
@@ -408,18 +464,26 @@ def GetTrapezeVis (dsup, dinf, surep, long,pas,quality):
                         else:
                             a=1
                         
-                        cal=np.array[[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),row[4]*0.5,a/2,2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[4]/2),row[4]*0.5,a/2,row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
-                        cal1=np.array[[row[3],row[5],row[3]-2*((row[5]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),row[4]*0.5,a/2,2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
-                        result=np.append(result,cal1,axis=0)
-                        compteur+=1
+                        if row[5] != "":
+                            row[5]=float(row[5])
+                            cal1=np.array([[row[3],row[5],row[3]-2*((row[5]/2)+a),row[3]+2*a,row[3]-2*(row[5]/2),row[4]*0.5,a/2,row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]])
+                            result=np.append(result,cal1,axis=0)
+                            compteur+=1
+                        else :
+                            compteur+=1
+                            continue
 
-    return result                
+    print (result)
+    return result.tolist()                
 
 
-def GetTrapezeEcrou (dsup, dinf, surep, long,pas,quality):
+def GetTrapezeEcrou (dinf, surep, long,pas,quality):
+    dinf=float(dinf)
+    surep=float(surep)
+    long=float(long)
     pasmax = long / 5 #car 5 fillets en prise minimum
-    dmax = dsup - surep
     dmin = dinf + surep
     compteur=0
     result=np.empty((0,14)) #empty array to store the results and return it
@@ -428,6 +492,10 @@ def GetTrapezeEcrou (dsup, dinf, surep, long,pas,quality):
         next(reader) #skip the header
 
         for row in reader:
+           row[3]=float(row[3])
+           row[4]=float(row[4])   
+           row[2]=int(row[2])
+
            if quality == 0: #if we want only the col 1 values
                 if pas == 0: #if we want only "pas gros"
                     if row[1]=='T'and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<3:
@@ -441,7 +509,7 @@ def GetTrapezeEcrou (dsup, dinf, surep, long,pas,quality):
                         else:
                             a=1
 
-                        cal=np.array[[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),row[4]*0.5,a/2,2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[4]/2),row[4]*0.5,a/2,row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
                         compteur+=1
 
@@ -458,17 +526,21 @@ def GetTrapezeEcrou (dsup, dinf, surep, long,pas,quality):
                         else:
                             a=1
                         
-                        cal=np.array[[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),row[4]*0.5,a/2,2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[4]/2),row[4]*0.5,a/2,row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
-                        cal1=np.array[[row[3],row[5],row[3]-2*((row[5]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),row[4]*0.5,a/2,2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
-                        result=np.append(result,cal1,axis=0)
-                        compteur+=1
-
+                        if row[5] != "":
+                            row[5]=float(row[5])
+                            cal1=np.array([[row[3],row[5],row[3]-2*((row[5]/2)+a),row[3]+2*a,row[3]-2*(row[5]/2),row[4]*0.5,a/2,row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]])
+                            result=np.append(result,cal1,axis=0)
+                            compteur+=1
+                        else :
+                            compteur+=1
+                            continue
 
            else:
                 if pas ==0: #if we want only "pas gros"
 
-                    if row[1]=='T'and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<3:
+                    if row[1]=='T'and row[3]>=dmin and row[4]<=pasmax and compteur<3:
                         
                         if row[4]==1.5 :
                             a=0.15
@@ -479,13 +551,13 @@ def GetTrapezeEcrou (dsup, dinf, surep, long,pas,quality):
                         else:
                             a=1
 
-                        cal=np.array[[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),row[4]*0.5,a/2,2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[4]/2),row[4]*0.5,a/2,row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
                         compteur+=1
 
                 else: #if we want "pas gros" and "pas fin"
 
-                    if row[1]=='T'and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<3:
+                    if row[1]=='T'and row[3]>=dmin and row[4]<=pasmax and compteur<3:
             
                         if row[4]==1.5 :
                             a=0.15
@@ -496,70 +568,72 @@ def GetTrapezeEcrou (dsup, dinf, surep, long,pas,quality):
                         else:
                             a=1
                         
-                        cal=np.array[[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),row[4]*0.5,a/2,2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[4]/2),row[4]*0.5,a/2,row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
-                        cal1=np.array[[row[3],row[5],row[3]-2*((row[5]/2)+a),row[3]+2*a,row[3]-2*(row[3]/2),row[4]*0.5,a/2,2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
-                        result=np.append(result,cal1,axis=0)
-                        compteur+=1
+                        if row[5] != "":
+                            row[5]=float(row[5])
+                            cal1=np.array([[row[3],row[5],row[3]-2*((row[5]/2)+a),row[3]+2*a,row[3]-2*(row[5]/2),row[4]*0.5,a/2,row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]])
+                            result=np.append(result,cal1,axis=0)
+                            compteur+=1
+                        else :
+                            compteur+=1
+                            continue
 
-                        #     for i in req:
-#         reponse[i][0] = req[i][0]#diametre nominal
-#         reponse[i][1] = req[i][1]#pas
-#         reponse[i][2] = #diametre fond filet vis
-#         reponse[i][3] = #diametre fond filet ecrou
-#         reponse[i][4] = #diametre forage / percage
-#         reponse[i][5] = a #rayon ecrou
-#         reponse[i][6] = a/2 rayon vis
-#         reponse[i][6] = req[i][0] - 1.5 * req[i][1]#diametre sortie outil vis
-#         reponse[i][7] = 2 * req[i][1]#hauteur min sortie outil vis
-#         reponse[i][8] = 3 * req[i][1]#hauteur max sortie outil vis
-#         reponse[i][9] = 1.5 * req[i][1]#chanfrein
-#         reponse[i][10] = 2 * req[i][1]#hauteur min sortie outil ecrou
-#         reponse[i][11] = 4 * req[i][1]#hauteur max sortie outil ecrou
-#         reponse[i][12] = req[i][0] + 0.5 * req[i][1]#diametre sortie outil ecrou
-    return result
+    print (result)
+    return result.tolist()
                 
 
-def GetRondVis(dsup, dinf, surep, long, pas,quality):
+def GetRondVis(dsup, surep, long, pas,quality):
+    dsup=float(dsup)
+    surep=float(surep)
+    long=float(long)
     pasmax = long / 5 #car 5 fillets en prise minimum
     dmax = dsup - surep
-    dmin = dinf + surep
     result=np.empty((0,13))
     compteur=0
     with open(f, 'r') as csvfile:
         reader = csv.reader(csvfile,delimiter=';')
         next(reader)
         for row in reversed(list(reader)):
+            row[3]=float(row[3])
+            row[4]=float(row[4])   
+            row[2]=int(row[2])
             if quality == 0: #if we want only the col 1 values
                 if pas == 0: #if we want only "pas gros"
                     if row[1]=='M' and row[3]<=dmax and row[4]<=pasmax and row[2]==1 and compteur<3:
 
-                        cal=np.array[[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
                         compteur+=1
 
                 else: #if we want "pas gros" and "pas fin"
 
                     if row[1]=='M' and row[3]<=dmax and row[4]<=pasmax and row[2]==1 and compteur<3:
-                        if row[4] != 0:
-                            cal=np.array[[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        if row[4] != "0":
+                            cal=np.array([[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                             result=np.append(result,cal,axis=0)
-                        cal1=np.array[[row[3],row[5],row[3]-row[5],row[3]+(row[5]/10),row[3]-row[5]+(row[5]/10),0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
+
+                        row[5]=float(row[5])
+                        cal1=np.array([[row[3],row[5],row[3]-row[5],row[3]+(row[5]/10),row[3]-row[5]+(row[5]/10),0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]])
                         result=np.append(result,cal1,axis=0)
-                        if math.isnan(row[6]) == False:
-                            cal2=np.array[[row[3],row[6],row[3]-row[6],row[3]+(row[6]/10),row[3]-row[6]+(row[6]/10),0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]]
+
+                        if row[6] != "":
+                            row[6]=float(row[6])
+                            cal2=np.array([[row[3],row[6],row[3]-row[6],row[3]+(row[6]/10),row[3]-row[6]+(row[6]/10),0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]])
                             result=np.append(result,cal2,axis=0)
                         else :
                             compteur+=1
                             continue
-                        if math.isnan(row[7]) == False:
-                            cal3=np.array[[row[3],row[7],row[3]-row[7],row[3]+(row[7]/10),row[3]-row[7]+(row[7]/10),0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]]
+                        if row[7] != "":
+                            row[7]=float(row[7])
+                            cal3=np.array([[row[3],row[7],row[3]-row[7],row[3]+(row[7]/10),row[3]-row[7]+(row[7]/10),0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]])
                             result=np.append(result,cal3,axis=0)
                         else :
                             compteur+=1
                             continue
-                        if math.isnan(row[8]) == False :
-                            cal4=np.array[[row[3],row[8],row[3]-row[8],row[3]+(row[8]/10),row[3]-row[8]+(row[8]/10),0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]]
+                        if row[8] != "":
+                            row[8]=float(row[8])
+                            cal4=np.array([[row[3],row[8],row[3]-row[8],row[3]+(row[8]/10),row[3]-row[8]+(row[8]/10),0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]])
                             result=np.append(result,cal4,axis=0)
                         else :
                             compteur+=1
@@ -570,43 +644,52 @@ def GetRondVis(dsup, dinf, surep, long, pas,quality):
                 if pas ==0: #if we want only "pas gros"
 
                     if row[1]=='M' and row[3]<=dmax and row[4]<=pasmax and row[2]<3 and compteur<3:
-                        cal=np.array[[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
                         compteur+=1
 
                 else: #if we want "pas gros" and "pas fin"
 
                     if row[1]=='M' and row[3]<=dmax and row[4]<=pasmax and row[2]<3 and compteur<3:
-                        if row[4] != 0:
-                            cal=np.array[[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        if row[4] != "0":
+                            cal=np.array([[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                             result=np.append(result,cal,axis=0)
-                        cal1=np.array[[row[3],row[5],row[3]-row[5],row[3]+(row[5]/10),row[3]-row[5]+(row[5]/10),0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
+
+                        row[5]=float(row[5])
+                        cal1=np.array([[row[3],row[5],row[3]-row[5],row[3]+(row[5]/10),row[3]-row[5]+(row[5]/10),0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]])
                         result=np.append(result,cal1,axis=0)
-                        if math.isnan(row[6]) == False:
-                            cal2=np.array[[row[3],row[6],row[3]-row[6],row[3]+(row[6]/10),row[3]-row[6]+(row[6]/10),0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]]
+
+                        if row[6] != "":
+                            row[6]=float(row[6])
+                            cal2=np.array([[row[3],row[6],row[3]-row[6],row[3]+(row[6]/10),row[3]-row[6]+(row[6]/10),0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]])
                             result=np.append(result,cal2,axis=0)
                         else :
                             compteur+=1
                             continue
-                        if math.isnan(row[7]) == False:
-                            cal3=np.array[[row[3],row[7],row[3]-row[7],row[3]+(row[7]/10),row[3]-row[7]+(row[7]/10),0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]]
+                        if row[7] != "":
+                            row[7]=float(row[7])
+                            cal3=np.array([[row[3],row[7],row[3]-row[7],row[3]+(row[7]/10),row[3]-row[7]+(row[7]/10),0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]])
                             result=np.append(result,cal3,axis=0)
                         else :
                             compteur+=1
                             continue
-                        if math.isnan(row[8]) == False :
-                            cal4=np.array[[row[3],row[8],row[3]-row[8],row[3]+(row[8]/10),row[3]-row[8]+(row[8]/10),0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]]
+                        if row[8] != "" :
+                            row[8]=float(row[8])
+                            cal4=np.array([[row[3],row[8],row[3]-row[8],row[3]+(row[8]/10),row[3]-row[8]+(row[8]/10),0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]])
                             result=np.append(result,cal4,axis=0)
                         else :
                             compteur+=1
                             continue
 
-    return result
+    print (result)
+    return result.tolist()
 
 
-def GetRondEcrou (dsup, dinf, surep, long, pas,quality):
+def GetRondEcrou (dinf, surep, long, pas,quality):
+    dinf=float(dinf)
+    surep=float(surep)
+    long=float(long)
     pasmax = long / 5 #car 5 fillets en prise minimum
-    dmax = dsup - surep
     dmin = dinf + surep
     result=np.empty((0,13))
     compteur=0
@@ -614,36 +697,45 @@ def GetRondEcrou (dsup, dinf, surep, long, pas,quality):
         reader = csv.reader(csvfile,delimiter=';')
         next(reader)
         for row in reader:
+            row[3]=float(row[3])
+            row[4]=float(row[4])   
+            row[2]=int(row[2])
             if quality == 0: #if we want only the col 1 values
                 if pas == 0: #if we want only "pas gros"
                     if row[1]=='M'and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<3:
 
-                        cal=np.array[[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
                         compteur+=1
 
                 else: #if we want "pas gros" and "pas fin"
 
                     if row[1]=='M' and row[3]>=dmin and row[4]<=pasmax and row[2]==1 and compteur<3:
-                        if row[4] != 0:
-                            cal=np.array[[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        if row[4] != "0":
+                            cal=np.array([[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                             result=np.append(result,cal,axis=0)
-                        cal1=np.array[[row[3],row[5],row[3]-row[5],row[3]+(row[5]/10),row[3]-row[5]+(row[5]/10),0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
+
+                        row[5]=float(row[5])
+                        cal1=np.array([[row[3],row[5],row[3]-row[5],row[3]+(row[5]/10),row[3]-row[5]+(row[5]/10),0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]])
                         result=np.append(result,cal1,axis=0)
-                        if math.isnan(row[6]) == False:
-                            cal2=np.array[[row[3],row[6],row[3]-row[6],row[3]+(row[6]/10),row[3]-row[6]+(row[6]/10),0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]]
+
+                        if row[6] != "":
+                            row[6]=float(row[6])
+                            cal2=np.array([[row[3],row[6],row[3]-row[6],row[3]+(row[6]/10),row[3]-row[6]+(row[6]/10),0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]])
                             result=np.append(result,cal2,axis=0)
                         else :
                             compteur+=1
                             continue
-                        if math.isnan(row[7]) == False:
-                            cal3=np.array[[row[3],row[7],row[3]-row[7],row[3]+(row[7]/10),row[3]-row[7]+(row[7]/10),0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]]
+                        if row[7] != "":
+                            row[7]=float(row[7])
+                            cal3=np.array([[row[3],row[7],row[3]-row[7],row[3]+(row[7]/10),row[3]-row[7]+(row[7]/10),0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]])
                             result=np.append(result,cal3,axis=0)
                         else :
                             compteur+=1
                             continue
-                        if math.isnan(row[8]) == False :
-                            cal4=np.array[[row[3],row[8],row[3]-row[8],row[3]+(row[8]/10),row[3]-row[8]+(row[8]/10),0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]]
+                        if row[8] != "":
+                            row[8]=float(row[8])
+                            cal4=np.array([[row[3],row[8],row[3]-row[8],row[3]+(row[8]/10),row[3]-row[8]+(row[8]/10),0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]])
                             result=np.append(result,cal4,axis=0)
                         else :
                             compteur+=1
@@ -654,38 +746,45 @@ def GetRondEcrou (dsup, dinf, surep, long, pas,quality):
                 if pas ==0: #if we want only "pas gros"
 
                     if row[1]=='M' and row[3]>=dmin and row[4]<=pasmax and row[2]<3 and compteur<3:
-                        cal=np.array[[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        cal=np.array([[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
                         compteur+=1
 
                 else: #if we want "pas gros" and "pas fin"
 
                     if row[1]=='M'and row[3]>=dmin and row[4]<=pasmax and row[2]<3 and compteur<3:
-                        if row[4] != 0:
-                            cal=np.array[[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]]
+                        if row[4] != "0":
+                            cal=np.array([[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                             result=np.append(result,cal,axis=0)
-                        cal1=np.array[[row[3],row[5],row[3]-row[5],row[3]+(row[5]/10),row[3]-row[5]+(row[5]/10),0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]]
+
+                        row[5]=float(row[5])
+                        cal1=np.array([[row[3],row[5],row[3]-row[5],row[3]+(row[5]/10),row[3]-row[5]+(row[5]/10),0.5*row[5],row[3]-1.5*row[5],2*row[5],3*row[5],1.5*row[5],2*row[5],4*row[5],row[3]+0.5*row[5]]])
                         result=np.append(result,cal1,axis=0)
-                        if math.isnan(row[6]) == False:
-                            cal2=np.array[[row[3],row[6],row[3]-row[6],row[3]+(row[6]/10),row[3]-row[6]+(row[6]/10),0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]]
+
+                        if row[6] != "":
+                            row[6]=float(row[6])
+                            cal2=np.array([[row[3],row[6],row[3]-row[6],row[3]+(row[6]/10),row[3]-row[6]+(row[6]/10),0.5*row[6],row[3]-1.5*row[6],2*row[6],3*row[6],1.5*row[6],2*row[6],4*row[6],row[3]+0.5*row[6]]])
                             result=np.append(result,cal2,axis=0)
                         else :
                             compteur+=1
                             continue
-                        if math.isnan(row[7]) == False:
-                            cal3=np.array[[row[3],row[7],row[3]-row[7],row[3]+(row[7]/10),row[3]-row[7]+(row[7]/10),0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]]
+                        if row[7] != "":
+                            row[7]=float(row[7])
+                            cal3=np.array([[row[3],row[7],row[3]-row[7],row[3]+(row[7]/10),row[3]-row[7]+(row[7]/10),0.5*row[7],row[3]-1.5*row[7],2*row[7],3*row[7],1.5*row[7],2*row[7],4*row[7],row[3]+0.5*row[7]]])
                             result=np.append(result,cal3,axis=0)
                         else :
                             compteur+=1
                             continue
-                        if math.isnan(row[8]) == False :
-                            cal4=np.array[[row[3],row[8],row[3]-row[8],row[3]+(row[8]/10),row[3]-row[8]+(row[8]/10),0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]]
+                        if row[8] != "":
+                            row[8]=float(row[8])
+                            cal4=np.array([[row[3],row[8],row[3]-row[8],row[3]+(row[8]/10),row[3]-row[8]+(row[8]/10),0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]])
                             result=np.append(result,cal4,axis=0)
                         else :
                             compteur+=1
                             continue
 
-    return result
+    print (result)
+    return result.tolist()
 
 
 
@@ -776,6 +875,8 @@ def GetRondEcrou (dsup, dinf, surep, long, pas,quality):
 #         reponse[i][10] = 4 * req[i][1]#hauteur max sortie outil ecrou
 #         reponse[i][11] = req[i][0] + 0.5 * req[i][1]#diametre sortie outil ecrou
 
+#         Mais du coup 12 en tout
+
 #     return reponse
 
 # def getwithgaz(dsup, dinf, surep, long):
@@ -802,6 +903,7 @@ def GetRondEcrou (dsup, dinf, surep, long, pas,quality):
 #         reponse[i][9] = 4 * req[i][1]#hauteur max sortie outil ecrou
 #         reponse[i][10] = req[i][0] + 0.5 * req[i][1]#diametre sortie outil ecrou
 
+#           Mais du coup 11 en tout
 #     return reponse
 
 # def gettrapeze(dsup, dinf, surep, long):
@@ -822,13 +924,16 @@ def GetRondEcrou (dsup, dinf, surep, long, pas,quality):
 #         reponse[i][3] = req[i][0] + 2 * req[i][2]#diametre fond filet ecrou
 #         reponse[i][4] = req[i][0] - req[i][1]#diametre forage / percage
 #         reponse[i][5] = 0.5 * req[i][1]#rayon
-#         reponse[i][6] = req[i][0] - 1.5 * req[i][1]#diametre sortie outil vis
-#         reponse[i][7] = 2 * req[i][1]#hauteur min sortie outil vis
-#         reponse[i][8] = 3 * req[i][1]#hauteur max sortie outil vis
-#         reponse[i][9] = 1.5 * req[i][1]#chanfrein
-#         reponse[i][10] = 2 * req[i][1]#hauteur min sortie outil ecrou
-#         reponse[i][11] = 4 * req[i][1]#hauteur max sortie outil ecrou
-#         reponse[i][12] = req[i][0] + 0.5 * req[i][1]#diametre sortie outil ecrou
+#         reponse[i][6]          RAYON 2
+#         reponse[i][7] = req[i][0] - 1.5 * req[i][1]#diametre sortie outil vis
+#         reponse[i][8] = 2 * req[i][1]#hauteur min sortie outil vis
+#         reponse[i][9] = 3 * req[i][1]#hauteur max sortie outil vis
+#         reponse[i][10] = 1.5 * req[i][1]#chanfrein
+#         reponse[i][11] = 2 * req[i][1]#hauteur min sortie outil ecrou
+#         reponse[i][12] = 4 * req[i][1]#hauteur max sortie outil ecrou
+#         reponse[i][13] = req[i][0] + 0.5 * req[i][1]#diametre sortie outil ecrou
+
+#           Mais du coup 14 en tout
 
 #     return reponse
 
@@ -862,6 +967,7 @@ def GetRondEcrou (dsup, dinf, surep, long, pas,quality):
 #         reponse[i][11] = 4 * req[i][1]#hauteur max sortie outil ecrou
 #         reponse[i][12] = req[i][0] + 0.5 * req[i][1]#diametre sortie outil ecrou
 
+#           Mais du coup 13 en tout
 #     return reponse
 
 

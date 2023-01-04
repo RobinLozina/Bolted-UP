@@ -1,301 +1,289 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>Concepteur de visserie</title>
-<link href="static/style.css" rel="stylesheet" type="text/css"/>   
+    <title>Bolted UP</title>
+<link href="static/css/main.css" rel="stylesheet" type="text/css"/>   
+
 <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/minecraftia" type="text/css"/>
+          
+<script src="https://kit.fontawesome.com/8618490ffc.js" crossorigin="anonymous"></script>
 </head>
-<body>
-    <br><br>
 
-    <h1>Bienvenue !</h1>
-    <h2>Ce site internet va vous permettre de vous simplifier le vie en permettant de trouver les vis qui répondent au mieux a vos exigeances</h2>
-
-    <br><br>
-
-    <h2>Pour commencer, veuillez nous renseigner sur le type de fillet : </h2>
-    <div>
-        <form id="typeFilet">
-            <div>
-                <input type="radio" name="filet" id="typeFilet1" value="1"/>
-                    <label for="typeFilet1">Filet métrique ISO</label>
-
-                <input type="radio" name="filet" id="typeFilet2" value="2"/>
-                    <label for="typeFilet2">Filet Withworth et Gaz</label>
-
-                <input type="radio" name="filet" id="typeFilet3" value="3"/>
-                    <label for="typeFilet3">Filet Trapézoïdale</label>
-
-                <input type="radio" name="filet" id="typeFilet4" value="4"/>
-                    <label for="typeFilet4">Filet Rond</label>
+<body id="body">
+    <header>
+        <div class="container">
+            <h2><span>Bolted</span> UP</h2>
+                <nav>
+                    <a href="#introduction">Services</a>
+                    <a href="#filetage">Filetage</a>
+                    <a href="#element">Elements d'assemblage</a>
+                    <a href="#tolerance">Tolérances</a>
+                </nav>
+                <button class="hamburger" id="hamburger">
+                    <div class="bar"></div>
+                </button>
             </div>
-        </form>
-    </div>
+    </header>
+    <nav class="mobile-nav" id="mobile-nav">
+        <a href="#introduction">Services</a>
+        <a href="#filetage">Filetage</a>
+        <a href="#element">Elements d'assemblage</a>
+        <a href="#tolerance">Tolérances</a>
+    </nav>
 
-    <br><br>
-    <h2>Vis ou écrou ?</h2>
-    <div>
-        <form id="typeElement">
-            <div>
-                <input type="radio" name="element" id="typeElement1" value="1"/>
-                    <label for="typeElement1">Vis</label>
-                <input type="radio" name="element" id="typeElement2" value="2"/>
-                    <label for="typeElement2">Ecrou</label>
+    <main>
+            <section class="banner">
+                <div class="container">
+                    <img src="/static/images/undraw_engineering_team_a7n2.svg" alt="logo" class="logo"/>
+                    <h1>
+                        Bolted UP, un projet <br class="hide-mobile">
+                        <span>des Grammoux</span> 
+                    </h1>
+                    <h3>Votre aide pour le cours de dessin</h3>
+                    <a href="#introduction" class="button">Get started</a>
+                </div>
+            </section>
+        <br><br>
+
+
+        <section id="introduction"  class="introduction">
+            <div class="container">
+                <h2>Services</h2>
+
+                <div class="introduction-grid">
+
+                        <div class="intro">
+                            <figure class="img-box">
+                                <img src="/static/images/filetage.png" alt="Filetage" class="img"/>
+                            </figure>
+                            <div class="content">
+                                <h3>Filetage</h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio consectetur officiis cupiditate eaque temporibus ducimus quibusdam quisquam fugiat deleniti enim. Sit hic quae distinctio laborum earum nihil natus a consequuntur.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="intro">
+                            <figure class="img-box">
+                                <img src="/static/images/elem assemblage2.png" alt="Elements d'assemblage" class="img"/>
+                            </figure>
+                            <div class="content">
+                                <h3>Elements d'assemblage</h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio consectetur officiis cupiditate eaque temporibus ducimus quibusdam quisquam fugiat deleniti enim. Sit hic quae distinctio laborum earum nihil natus a consequuntur.
+                                </p>
+                            </div>
+
+                        </div><div class="intro">
+                            <figure class="img-box">
+                                <img src="/static/images/tolerance.png" alt="Tolérances" class="img"/>
+                            </figure>
+                            <div class="content">
+                                <h3>Tolérances</h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio consectetur officiis cupiditate eaque temporibus ducimus quibusdam quisquam fugiat deleniti enim. Sit hic quae distinctio laborum earum nihil natus a consequuntur.
+                                </p>
+                            </div>
+                        </div>
+                </div>
             </div>
-        </form>
-    </div>
+        </section>
 
-    <span id="metrique">
+        <section id="filetage"  class="filetage">
         
-        <div id="questionTextDiv" style="display: none;">
+            <div class="container">
+                <h2>Filetage</h2>
+                <div class="filetText">
+                    <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur repellat perferendis quam suscipit facilis, ad accusantium itaque voluptate rem quia, quasi ea soluta. Odit, distinctio deleniti inventore velit saepe rem Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi perspiciatis quia delectus corrupti quos tenetur a magnam inventore nobis, doloribus pariatur omnis non architecto consequatur, reiciendis sint dolorem consequuntur. Laborum.</h3>
+                    <img src="/static/images/undraw_working_re_ddwy.svg" alt="logo" class="logo"/>
+                </div>
 
-            <div id="diamVisDiv">
-                <p>Diamètre de la vis non usinée ?</p>
-                <input type="text" id="diamVis"> 
-                <br>
-            </div>
+                <h4>Type de filet : </h4>
 
-            <div id="diamEcrouDiv">
-                <p>Diamètre de l'écrou non usiné ?</p>
-                <input type="text" id="diamEcrou"> 
-                <br>
-            </div>
+                <form id="typeFilet">
+                    <div class="typeFilet-flex">
+                        <div class="content">
+                            <input type="radio" name="filet" id="typeFilet1"  value="1"class="radio"/>
+                            <label for="typeFilet1">Filet métrique ISO</label>
+                        </div>
 
-            <div>
-                <p>Surépaisseur d'usinage ?</p>
-                <input type="text" id="surepaisseurUsinage"> 
-                <br>
-            </div>
-
-            <div>
-                <p>Longueur ?</p>
-                <input type="text" id="longueur">
-                <br>
-            </div>
-
-            <div>
-                <p>Type de pas ?</p>
-                <form id="typePas">
-                    <input type="radio" name="typePas" id="typePas1" value="1"/>
-                        <label for="typePas1">Pas gros uniquement</label>
-                    <input type="radio" name="typePas" id="typePas2" value="2"/>
-                        <label for="typePas2">Pas gros et fin</label>
+                        <div class="content">
+                            <input type="radio" name="filet" id="typeFilet2" value="2"class="radio"/>
+                            <label for="typeFilet2">Filet Withworth et Gaz</label>
+                        </div>
+                        <div class="content">
+                            <input type="radio" name="filet" id="typeFilet3" value="3"class="radio"/>
+                            <label for="typeFilet3">Filet Trapézoïdale</label>
+                        </div>
+                        <div class="content">
+                            <input type="radio" name="filet" id="typeFilet4" value="4"class="radio"/>
+                            <label for="typeFilet4">Filet Rond</label>
+                        </div>
+                    </div>
                 </form>
-                <br>
-            </div>
 
-            <div>
-                <p>Type de production ?</p>
-                <form id="typeProduction">
-                    <input type="radio" name="typeProduction" id="typeProduction1" value="1"/>
-                        <label for="typeProduction1">Fréquente</label>
-                    <input type="radio" name="typeProduction" id="typeProduction2" value="2"/>
-                        <label for="typeProduction2">Tout type</label>
-                </form>
-            </div>
+                <h4>Vis ou écrou ?</h4>
+
+                    <form id="typeElement">
+                        <div class="typeElem-flex">
+                            <div class="content">
+                                <input type="radio" name="element" id="typeElement1" value="1" class="radio"/>
+                                <label for="typeElement1">Vis</label>
+                            </div>
+                            <div class="content">
+                                <input type="radio" name="element" id="typeElement2" value="2" class="radio"/>
+                                <label for="typeElement2">Ecrou</label>
+                            </div>
+                        </div>
+                    </form>
+                
+
             
-            <br><br>
-            <button id="btnSend">Trouver la vis !</button>
-            <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-            <script src="app.js"></script>
-        </div>
+                <div id="questionTextDiv" class="questionTextDiv-flex" style="display: none;">
 
-        <div>
-            <br><br>
-            <span id="errorMessage"></span>
-            <br>
-        </div>
-        <div id="resultat" style="display: none;">
-            <h3>Voici les différentes vis qui sont compatibles</h3>
-            <br>
-        
-            <table>
+                        <div id="diamVisDiv" class="content">
+                            <p>Diamètre de la vis non usinée ?</p>
+                            <input type="number" id="diamVis" min="1" max="300" class="input"> 
+                            <br>
+                        </div>
 
-                 <tr>   <th>d nominal</th><th>Pas</th><th>D1 forage/percage</th><th id="FFecrou">D2 fond de filet ecrou</th><th id="FFvis">d3 fond filet vis</th><th>Rayon</th><th id="diamSortieVis">d sortie outil vis</th><th id="hauteurMinVis">h min sortie outil vis</th><th id="hauteurMaxVis">h max sortie outil vis</th><th>chanfrein</th><th id="diamSortieEcrou">d sortie outil ecrou</th><th id="hauteurMinEcrou">h min sortie outil ecrou</th><th id="hauteurMaxEcrou">h max sortie outil ecrou</th>    </tr>
+                        <div id="diamEcrouDiv" class="content">
+                            <p>Diamètre de l'écrou non usiné ?</p>
+                            <input type="number" id="diamEcrou" min="1" max="300" class="input"> 
+                            <br>
+                        </div>
 
-            </table id="tableau">
-        </div>
-        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-        <script src="app.js"></script>
-        <br>
-       
+                        <div class="content">
+                            <p>Surépaisseur d'usinage ?</p>
+                            <input type="number" id="surepaisseurUsinage" min="0" max="20" class="input"> 
+                            <br>
+                        </div>
 
+                        <div class="content">
+                            <p>Longueur de l'élement étudié ?</p>
+                            <input type="number" id="longueur" min="1" max="300" class="input">
+                            <br>
+                        </div>
 
+                        <div id="typePasDiv" class="content">
+                            <p>Type de pas ?</p>
+                            <form id="typePas">
+                                <div class="typePas">
+                                    <input type="radio" name="typePas" id="typePas1" value="1" class="radio"/>
+                                    <label for="typePas1">Pas gros uniquement</label>
+                                </div>
+                                <div class="typePas">
+                                    <input type="radio" name="typePas" id="typePas2" value="2" class="radio"/>
+                                    <label for="typePas2">Pas gros et fin</label>
+                                </div>
+                            </form>
+                        </div>
 
-    </span>
+                        <div id="typeProdDiv" class="content"> 
+                            <p>Type de production ?</p>
+                            <form id="typeProduction">
+                                <div class="typeProd">
+                                    <input type="radio" name="typeProduction" id="typeProduction1" value="1" class="radio"/>
+                                    <label for="typeProduction1">Fréquente</label>
+                                </div>
+                                <div class="typeProd">
+                                    <input type="radio" name="typeProduction" id="typeProduction2" value="2" class="radio"/>
+                                    <label for="typeProduction2">Tout type</label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
-    <!--Lorsque le filet est Withworth et Gaz-->    
-    <!-- <span id="withgaz">
-        
-        <h3>Vous avez choisi les filets withworth et gaz</h3>
+                <div class="center">
+                    <button id="btnSend" class="button">Calculer !</button>
+                </div>
+            </div>
+        </section>
 
-        <p>Quel est le diamètre de la vis non usinée ?</p>
-        <input type="text" id="withgazdvnu"> 
-        <br>
-        <p>Quel est le diamètre de l'écrou non usiné ?</p>
-        <input type="text" id="withgazdenu">
-        <br>
-        <p>Quel est la surépaisseur d'usinage ?</p>
-        <input type="text" id="withgazsurep">
-        <br>
-        <p>Quel est la longueur de la vis ?</p>
-        <input type="text" id="withgazlon"> -->
-        <!-- <br><br>
-        <button id="btnwithgaz">Trouver la vis !</button>
-        <br><br>
-        <span id="messagewithgaz"></span>
-        <br>
-        <h3>Voici les différentes vis qui sont compatibles</h3>
-        <br>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>d nominal</th>
-                    <th>Pas</th>
-                    <th>d1 forage/percage</th>
-                    <th>Rayon</th>
-                    <th>d sortie outil vis</th>
-                    <th>h min sortie outil vis</th>
-                    <th>h max sortie outil vis</th>
-                    <th>chanfrein</th>
-                    <th>h min sortie outil ecrou</th>
-                    <th>h max sortie outil ecrou</th>
-                    <th>d sortie outil ecrou</th>
-                </tr>
-            </thead>
-            <tbody id="tabwithgaz">
+        <section id="resultat" class="resultat">
+            <div class="container">
+                    <h4 id="errorMessage"></h4>
+                <div id="resultatTableau" style="display:none;">
+                    <h4>Voici les différentes vis qui sont compatibles</h4>
                 
-            </tbody>
-        </table>
+                    <table id="tableau">
 
-        <br>
-        <p>Attention ! n'oubliez pas de vérifier a ce que la vis soit bien réalisable. Les parois ne sont elles pas trop fines ? il y a-t-il assez de matière ? Tout cela dépends de votre projet.</p>
+                        <tr>   <th>d nominal</th><th>Pas</th><th>D1 forage/percage</th><th id="FFecrou">D2 fond de filet ecrou</th><th id="FFvis">d3 fond filet vis</th><th>Rayon</th><th id="diamSortieVis">d sortie outil vis</th><th id="hauteurMinVis">Largeur min sortie outil vis</th><th id="hauteurMaxVis">Largeur max sortie outil vis</th><th id="chanfrein">chanfrein</th><th id="diamSortieEcrou">d sortie outil ecrou</th><th id="hauteurMinEcrou">Largeur min sortie outil ecrou</th><th id="hauteurMaxEcrou">Largeur max sortie outil ecrou</th>    </tr>
 
-    </span> -->
+                    </table>
+                </div>
+            </div>
+        </section>
 
-    <!--Lorsque le filet est Trapézoïdal-->
-    <!-- <span id="trap">
 
-        <h3>Vous avez choisi le filet trapézoïdal</h3>
+        <section id="element" class="element">
+            <div class="container">
+                <h2>Elements d'assemblage</h2>
+                <h3>En cours de construction </h3>
+                <img src="/static/images/undraw_under_construction_-46-pa.svg" alt=""/ class="image">
+            </div>
+        </section>
 
-        <p>Quel est le diamètre de la vis non usinée ?</p>
-        <input type="text" id="trapdvnu">
-        <br>
-        <p>Quel est le diamètre de l'écrou non usiné ?</p>
-        <input type="text" id="trapdenu"> 
-        <br>
-        <p>Quel est la surépaisseur d'usinage ?</p>
-        <input type="text" id="trapsurep"> 
-        <br>
-        <p>Quel est la longueur de la vis ?</p>
-        <input type="text" id="traplon">
-        <br><br> -->
-        <!-- <button id="btntrap">Trouver la vis !</button>
-        <br><br>
-        <span id="messagetrap"></span>
-        <br>
-        <h3>Voici les différentes vis qui sont compatibles</h3>
-        <br>
+        <section id="tolerance" class="tolerance">
+            <div class="container">
+                <h2>Tolérances</h2>
+                <h3>En cours de construction</h3>
+                <img src="/static/images/undraw_under_construction_-46-pa.svg" alt=""/ class="image">
+            </div>
+        </section>
 
-        <table>
-            <thead> 
-                <tr>  -->
-                    <!-- <th>d nominal</th>
-                    <th>Pas</th>
-                    <th>d1 fond filet vis</th>
-                    <th>d2 fond filet ecrou</th>
-                    <th>d3 forage/percage</th>
-                    <th>Rayon</th>
-                    <th>d sortie outil vis</th>
-                    <th>h min sortie outil vis</th>
-                    <th>h max sortie outil vis</th>
-                    <th>chanfrein</th>
-                    <th>h min sortie outil ecrou</th>
-                    <th>h max sortie outil ecrou</th>
-                    <th>d sortie outil ecrou</th>
-                </tr>
-            </thead>
-            <tbody id="tabtrap">
+        <section id="footer" class="footer">
+            <div class="container">
                 
-            </tbody>
-        </table>
+                <div class="info1">
+                    <h3>Liens</h3>
+                    <a href="#introduction">Services</a>
+                    <a href="#filetage">Filetage</a>
+                    <a href="#element">Elements d'assemblage</a>
+                    <a href="#tolerance">Tolérances</a>
+                </div>
 
-        <br>
-        <p>Attention ! n'oubliez pas de vérifier a ce que la vis soit bien réalisable. Les parois ne sont elles pas trop fines ? il y a-t-il assez de matière ? Tout cela dépends de votre projet.</p>
+                <div class="info2">
+                    <h3>Réclamations</h3>
+                    <form>
+                        <textarea name="email" id="email" placeholder="message" class="form-element"></textarea>
+                        <br>
+                        <input type="submit" value="Send" class="button" id="buttonEmail">
+                    </form>
+                </div>
 
+                <div class="info3">
+                    <h3>Contact</h3>
+                    <p>Quai du Condroz 28 <br>Liège Belgique</p>
+                    <div class="icons">
+                        <div class="icons1" id="linkedin">
+                            <i class="fa-brands fa-linkedin-in"></i>
+                        </div>
+                        <div class="icons2" id="github">
+                            <i class="fa-brands fa-github"></i>
+                        </div>
+                        <div class="icons3" id="paypal">
+                            <i class="fa-brands fa-paypal"></i>
+                        </div>
+                    </div>
+                </div>
 
-    </span>
-
-    Lorsque le filet est Rond
-     <span id="rond">
-
-        <h3>Vous avez choisi le filet rond</h3>
-
-        <p>Quel est le diamètre de la vis non usinée ?</p>
-        <input type="text" id="ronddvnu"> 
-        <br>
-        <p>Quel est le diamètre de l'écrou non usiné ?</p>
-        <input type="text" id="ronddenu"> 
-        <br>
-        <p>Quel est la surépaisseur d'usinage ?</p>
-        <input type="text" id="rondsurep"> 
-        <br>
-        <p>Quel est la longueur de la vis ?</p>
-        <input type="text" id="rondlon"> 
-        <br><br>
-        <button id="btnrond">Trouver la vis !</button>
-        <br><br>
-        <span id="messagerond"></span>
-        <br>
-        <h3>Voici les différentes vis qui sont compatibles</h3>
-        <br>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>d nominal</th>
-                    <th>Pas</th>
-                    <th>d1 fond filet vis</th>
-                    <th>d2 fond filet ecrou</th>
-                    <th>d3 forage/percage</th>
-                    <th>Rayon</th>
-                    <th>d sortie outil vis</th>
-                    <th>h min sortie outil vis</th>
-                    <th>h max sortie outil vis</th>
-                    <th>chanfrein</th>
-                    <th>h min sortie outil ecrou</th> --> 
-                    <!-- <th>h max sortie outil ecrou</th>
-                    <th>d sortie outil ecrou</th>
-                </tr>
-            </thead>
-            <tbody id="tabrond">
-                
-            </tbody>
-        </table>
-
-        <br>
-        <p>Attention ! n'oubliez pas de vérifier a ce que la vis soit bien réalisable. Les parois ne sont elles pas trop fines ? il y a-t-il assez de matière ? Tout cela dépends de votre projet.</p>
+            </div>
+        </section>
 
 
-    </span> 
-
-    <span id="errormessage"></span> -->
-
-
-
-
-
-    <br><br><br><br><br><br><br><br><br>
-    <footer>
-        <p>Site créé dans le cadre d'un projet de technologie du web.</p>
-        <p>Concepteurs : LOZINA Robin et SENGER Nicolas</p>
-        <p>Professeur en charge : P.BOURMANE</p>
-    </footer>
-
+    </main>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="app.js"></script>
+    
+
 
 </body>
 </html>
