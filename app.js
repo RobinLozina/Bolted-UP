@@ -292,22 +292,40 @@ function AfficherTableau(reponse) {
     console.log(reponse);
     console.log(reponse[0]);
 
- 
+            
     $('#tableau').find("tr:gt(0)").remove();    // Supprimer toutes les lignes sauf la première
     
 
     /* Checking if the response is empty. If it is, it hides the result and displays an error message.
     If it is not empty, it clears the error message. */
     if(reponse.length==0){
-        $('#resultat').hide();
-        $('#errorMessage').html('<p>Aucun résultat trouvé !</p>');
+        console.log("tout vide");
+        $('errorMessage').show();
+        $('#errorMessage').html('<h4>Aucun résultat trouvé !</h4>'); 
+        $('#resultatTableau').hide()
         return;
     }
     else{
+        console.log("pas vide");
+        $('errorMessage').hide();
         $('#errorMessage').html('');
     }
-    
-    
+
+    if(reponse[0].length == 0){      
+        console.log("vide premier element");
+        $('errorMessage').show();
+        $('#errorMessage').html('<h4>Aucun résultat trouvé !</h4>');
+        $('#resultatTableau').hide()
+        return;
+    }
+    else{
+        console.log("pas vide");
+        $('errorMessage').hide();
+        $('#errorMessage').html('');
+
+        
+    }
+
 
     if(reponse[0].length == 11){           // Si le type de filet est WithGaz
         console.log("WithGaz");
@@ -641,7 +659,7 @@ function AfficherTableau(reponse) {
 
 window.setTimeout(function() {
     $("#popup").show();
-}, 20000);
+}, 50000);
 
 
 $('#popupButton').click(function(){
