@@ -55,7 +55,6 @@ $('#btnSend').off().on('click',function(){
                 element = 1;
                 console.log("Ecrou");
             }
-            console.log("Les barrettes se ressemblent toutes comme les mecs au japon");
            var data = {
             'dvnu': $('#diamVis').val(),
             'denu': $('#diamEcrou').val(),
@@ -278,9 +277,14 @@ $('#typeElement2').click(function(){      // Afficher le bon champ en fonction d
 
 
 
+
+/*
+  It creates a table with the data from the JSON response
+  @param reponse - the JSON response from the server
+ */
 function AfficherTableau(reponse) {
 
-    console.log("Professeur que signifie la mala est gangx s'il vous plait AFFICHER TAB ?");
+    console.log("AFFICHER TAB");
     /* Parsing the JSON response and then creating a table with the data. */
     $('#resultatTableau').show();
     var reponse = JSON.parse(reponse);
@@ -389,9 +393,9 @@ function AfficherTableau(reponse) {
 
 
     else if(reponse[0].length == 12){      // Si le type de filet est Metrique
-        console.log("MERCI AUX CLIENTS FIDELES METRIQUE");
+        console.log("METRIQUE");
         if(document.getElementById('typeElement1').checked){    // Si le type d'élément est une vis
-            console.log("C'est le mec qui bouffe le cul d'une pute VISMETRIQUE ")
+            console.log("VIS METRIQUE ")
                         // HIDE TOUS LES TRUCS A HIDE
             $('#FFecrou').hide();
             $('#diamSortieEcrou').hide();
@@ -429,7 +433,7 @@ function AfficherTableau(reponse) {
             
         }
         else if(document.getElementById('typeElement2').checked){    // Si le type d'élément est un ecrou
-            console.log("Parce que j'suis en BSB en Dolce Gabana ECRU METRIQUE");
+            console.log("ECROU METRIQUE");
             $('#FFecrou').hide();
             $('#diamSortieVis').hide();
             $('#hauteurMinVis').hide();
@@ -468,9 +472,9 @@ function AfficherTableau(reponse) {
 
 
     else if(reponse[0].length == 13){      // Si le type de filet est Rond
-        console.log("ROND ROND ROND")
+        console.log("ROND")
         if(document.getElementById('typeElement1').checked){    // Si le type d'élément est une vis
-            console.log("VIS ROND ROND ROND")
+            console.log("VIS ROND")
              // HIDE TOUS LES TRUCS A HIDE
             $('#FFecrou').show(); 
             $('#diamSortieEcrou').hide();
@@ -511,7 +515,7 @@ function AfficherTableau(reponse) {
             
         }
         else if(document.getElementById('typeElement2').checked){    // Si le type d'élément est un ecrou
-            console.log("ECROU ROND ROND ROND")
+            console.log("ECROU ROND")
              // HIDE TOUS LES TRUCS A HIDE
             $('#FFecrou').show(); 
             $('#diamSortieVis').hide();
@@ -549,9 +553,9 @@ function AfficherTableau(reponse) {
     }
 
     else if(reponse[0].length == 14){      // Si le type de filet est Trapézoïdal
-        console.log("TRAPEZOIDALE miam")
+        console.log("TRAPEZOIDALE")
         if(document.getElementById('typeElement1').checked){    // Si le type d'élément est une vis
-            console.log("VIS TRAP et je parle pas de Niska")
+            console.log("VIS TRAP")
              // HIDE TOUS LES TRUCS A HIDE
             $('#FFecrou').show(); 
             $('#diamSortieEcrou').hide();
@@ -635,6 +639,17 @@ function AfficherTableau(reponse) {
     return 
 }
 
+window.setTimeout(function() {
+    $("#popup").show();
+}, 20000);
+
+
+$('#popupButton').click(function(){
+    window.open("https://paypal.me/RobinLozina?country.x=BE&locale.x=fr_FR", "_blank","toolbar=no,titlebar=no,top=200,left=500,width=600,height=600");
+    $('#popup').hide();
+});
+
+
 $('#buttonEmail').click(function(){
     email= $('#email').val();
     if(email == "Rick Astley"){
@@ -654,6 +669,6 @@ $('#github').click(function(){
 });
 
 $('#paypal').click(function(){
-    window.open("https://paypal.me/RobinLozina?country.x=BE&locale.x=fr_FR", "_blank");
+    window.open("https://paypal.me/RobinLozina?country.x=BE&locale.x=fr_FR", "_blank","toolbar=no,titlebar=no,top=200,left=500,width=600,height=600");
 });
 
