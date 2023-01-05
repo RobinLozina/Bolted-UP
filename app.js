@@ -311,21 +311,6 @@ function AfficherTableau(reponse) {
         $('#errorMessage').html('');
     }
 
-    if(reponse[0].length == 0){      
-        console.log("vide premier element");
-        $('errorMessage').show();
-        $('#errorMessage').html('<h4>Aucun résultat trouvé !</h4>');
-        $('#resultatTableau').hide()
-        return;
-    }
-    else{
-        console.log("pas vide");
-        $('errorMessage').hide();
-        $('#errorMessage').html('');
-
-        
-    }
-
 
     if(reponse[0].length == 11){           // Si le type de filet est WithGaz
         console.log("WithGaz");
