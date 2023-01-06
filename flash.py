@@ -422,7 +422,7 @@ def GetTrapezeVis (dsup, surep, long,pas,quality):
                         else:
                             a=1
                         
-                        cal=np.array([row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[4]/2),row[4]*0.5,a/2,row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]])
+                        cal=np.array([[row[3],row[4],row[3]-2*((row[4]/2)+a),row[3]+2*a,row[3]-2*(row[4]/2),row[4]*0.5,a/2,row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                         result=np.append(result,cal,axis=0)
                         if row[5] != "":
                             row[5]=float(row[5])
@@ -609,6 +609,7 @@ def GetRondVis(dsup, surep, long, pas,quality):
                 else: #if we want "pas gros" and "pas fin"
 
                     if row[1]=='M' and row[3]<=dmax and row[4]<=pasmax and row[2]==1 and compteur<3:
+                        print(compteur)
                         if row[4] != "0":
                             cal=np.array([[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                             result=np.append(result,cal,axis=0)
@@ -635,6 +636,7 @@ def GetRondVis(dsup, surep, long, pas,quality):
                             row[8]=float(row[8])
                             cal4=np.array([[row[3],row[8],row[3]-row[8],row[3]+(row[8]/10),row[3]-row[8]+(row[8]/10),0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]])
                             result=np.append(result,cal4,axis=0)
+                            compteur+=1
                         else :
                             compteur+=1
                             continue
@@ -677,6 +679,7 @@ def GetRondVis(dsup, surep, long, pas,quality):
                             row[8]=float(row[8])
                             cal4=np.array([[row[3],row[8],row[3]-row[8],row[3]+(row[8]/10),row[3]-row[8]+(row[8]/10),0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]])
                             result=np.append(result,cal4,axis=0)
+                            compteur+=1
                         else :
                             compteur+=1
                             continue
@@ -737,6 +740,7 @@ def GetRondEcrou (dinf, surep, long, pas,quality):
                             row[8]=float(row[8])
                             cal4=np.array([[row[3],row[8],row[3]-row[8],row[3]+(row[8]/10),row[3]-row[8]+(row[8]/10),0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]])
                             result=np.append(result,cal4,axis=0)
+                            compteur+=1
                         else :
                             compteur+=1
                             continue
@@ -779,6 +783,7 @@ def GetRondEcrou (dinf, surep, long, pas,quality):
                             row[8]=float(row[8])
                             cal4=np.array([[row[3],row[8],row[3]-row[8],row[3]+(row[8]/10),row[3]-row[8]+(row[8]/10),0.5*row[8],row[3]-1.5*row[8],2*row[8],3*row[8],1.5*row[8],2*row[8],4*row[8],row[3]+0.5*row[8]]])
                             result=np.append(result,cal4,axis=0)
+                            compteur+=1
                         else :
                             compteur+=1
                             continue
