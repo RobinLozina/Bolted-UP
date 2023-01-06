@@ -609,7 +609,6 @@ def GetRondVis(dsup, surep, long, pas,quality):
                 else: #if we want "pas gros" and "pas fin"
 
                     if row[1]=='M' and row[3]<=dmax and row[4]<=pasmax and row[2]==1 and compteur<3:
-                        print(compteur)
                         if row[4] != "0":
                             cal=np.array([[row[3],row[4],row[3]-row[4],row[3]+(row[4]/10),row[3]-row[4]+(row[4]/10),0.5*row[4],row[3]-1.5*row[4],2*row[4],3*row[4],1.5*row[4],2*row[4],4*row[4],row[3]+0.5*row[4]]])
                             result=np.append(result,cal,axis=0)
