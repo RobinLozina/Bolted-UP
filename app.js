@@ -312,6 +312,7 @@ function AfficherTableau(reponse) {
     }
 
 
+
     if(reponse[0].length == 11){           // Si le type de filet est WithGaz
         console.log("WithGaz");
         if(document.getElementById('typeElement1').checked){    // Si le type d'élément est une vis
