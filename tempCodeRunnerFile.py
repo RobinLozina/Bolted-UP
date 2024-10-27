@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request #On importe le serveur flask ainsique des méthodes qui nous seront utilses comme redirect et request
+from main import Flask, redirect, request #On importe le serveur flask ainsique des méthodes qui nous seront utilses comme redirect et request
 import json
 import sqlite3
 import time
