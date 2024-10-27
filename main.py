@@ -1,9 +1,6 @@
 from flask import Flask, redirect, request 
 import json
-import sqlite3
-import time
 import math
-import struct 
 import csv
 import numpy as np
 
