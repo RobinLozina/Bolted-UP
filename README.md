@@ -11,7 +11,7 @@ To launch the application you will need to install certain things :
 
 - An IDE like VS Code see here : https://code.visualstudio.com/download
 - A Python interpreter for your IDE
-- Python and the module Flask, JSON, CSV and Numpy see here : https://www.python.org/downloads/
+- Python and the module Flask see here : https://www.python.org/downloads/
 
 Install the dependencies with `pip install -r requirements.txt` (JSON and CSV are part of Python's standard library).
 
