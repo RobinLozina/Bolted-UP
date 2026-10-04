@@ -13,7 +13,9 @@ To launch the application you will need to install certain things :
 - A Python interpreter for your IDE
 - Python and the module Flask, JSON, CSV and Numpy see here : https://www.python.org/downloads/
 
-After that, you can open the folder on your IDE and RUN the python file. It will give you in the terminal a PORT on your PC in which you can access the website.
+Install the dependencies with `pip install -r requirements.txt` (JSON and CSV are part of Python's standard library).
+
+After that, you can open the folder on your IDE and RUN `main.py`. It will give you in the terminal a PORT on your PC in which you can access the website.
 
 3. HOW TO USE
 
